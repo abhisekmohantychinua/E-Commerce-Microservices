@@ -1,0 +1,1 @@
+![Authentication](../resources/authorization_flow.svg)

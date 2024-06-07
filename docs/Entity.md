@@ -1,0 +1,1 @@
+![Entity](../resources/Entity.svg)
