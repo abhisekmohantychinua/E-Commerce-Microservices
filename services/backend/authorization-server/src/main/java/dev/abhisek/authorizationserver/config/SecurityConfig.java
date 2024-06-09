@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import dev.abhisek.authorizationserver.client.ClientMapper;
 import dev.abhisek.authorizationserver.client.ClientRepository;
+import dev.abhisek.authorizationserver.user.UserResponse;
 import dev.abhisek.authorizationserver.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,8 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenClaimsContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -138,5 +141,16 @@ public class SecurityConfig {
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
+    }
+
+    @Bean
+    OAuth2TokenCustomizer<OAuth2TokenClaimsContext> tokenCustomizer() {
+        return new OAuth2TokenCustomizer<OAuth2TokenClaimsContext>() {
+            @Override
+            public void customize(OAuth2TokenClaimsContext context) {
+                UserResponse userResponse = userService.getUserByUsername(context.getPrincipal().getName()).get();
+                context.getClaims().claim("user_id", userResponse.getId());
+            }
+        };
     }
 }
