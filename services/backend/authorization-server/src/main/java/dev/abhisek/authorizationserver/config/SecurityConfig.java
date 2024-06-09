@@ -7,12 +7,14 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import dev.abhisek.authorizationserver.client.ClientMapper;
 import dev.abhisek.authorizationserver.client.ClientRepository;
+import dev.abhisek.authorizationserver.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -37,6 +39,7 @@ import static org.springframework.http.MediaType.TEXT_HTML;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final UserService userService;
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
 
@@ -63,6 +66,12 @@ public class SecurityConfig {
 //                todo- custom login form to be added during frontend
                 .formLogin(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    UserDetailsService userDetailsService() {
+        return username -> userService.getUserByUsername(username)
+                .orElseThrow(RuntimeException::new);// todo- handle exception properly
     }
 
 
