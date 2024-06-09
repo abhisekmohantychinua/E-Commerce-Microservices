@@ -5,7 +5,7 @@ spring:
       port: 27017
       authentication-database: admin
       username: root
-      password: pass
-  server:
-    port: 9000
+      password: password
+server:
+  port: 9000
 
