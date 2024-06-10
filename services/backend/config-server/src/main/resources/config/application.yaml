@@ -8,3 +8,7 @@ spring:
   cloud:
     config:
       override-system-properties: false
+services:
+  urls:
+    #    user: lb://user-service
+    user: http://localhost:8081/users

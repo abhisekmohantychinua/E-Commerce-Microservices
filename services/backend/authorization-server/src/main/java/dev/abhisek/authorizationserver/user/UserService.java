@@ -15,12 +15,12 @@ public class UserService {
     private final RestTemplate template = new RestTemplate();
 
     //    todo- to be added in application.yaml
-    @Value("${user.url}")
+    @Value("${services.urls.user}")
     private String userUrl;
 
     public Optional<UserResponse> getUserByUsername(String username) {
         ResponseEntity<UserResponse> userResponseResponseEntity = template
-                .getForEntity(userUrl, UserResponse.class, Map.of("username", username));
+                .getForEntity(userUrl + "/auth?username={username}", UserResponse.class, Map.of("username", username));
         if (userResponseResponseEntity.getStatusCode().isError()) {
             return Optional.empty();
         }
