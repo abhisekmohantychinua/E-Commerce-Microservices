@@ -10,5 +10,13 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  servlet:
+    multipart:
+      max-file-size: 2MB
+
+application:
+  upload-path: ./uploads/profiles/
+  default-profile: default.png
+
 server:
   port: 8081
