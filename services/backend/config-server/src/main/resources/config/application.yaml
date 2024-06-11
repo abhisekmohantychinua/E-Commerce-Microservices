@@ -12,3 +12,5 @@ services:
   urls:
     #    user: lb://user-service
     user: http://localhost:8081/users
+    #    product: lb://product-services
+    product: http://localhost:8082/products
