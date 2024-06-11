@@ -17,4 +17,8 @@ public class Picture {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String path;
+
+    public Picture(String path) {
+        this.path = path;
+    }
 }

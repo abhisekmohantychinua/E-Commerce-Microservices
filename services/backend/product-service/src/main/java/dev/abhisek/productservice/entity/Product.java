@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,18 +24,18 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Detail> details;
+    private List<Detail> details = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Picture> pictures;
+    private List<Picture> pictures = new ArrayList<>();
     private Double price;
     private Integer quantity;
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedAt;
-    private Boolean notHidden;
+    private Boolean notHidden = true;
 }
