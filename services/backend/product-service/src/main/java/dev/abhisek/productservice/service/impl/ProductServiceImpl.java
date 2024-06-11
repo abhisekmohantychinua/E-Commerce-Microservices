@@ -26,13 +26,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String addProduct(ProductRequest request) {
+        final String productId = UUID.randomUUID().toString();
         // Create product with basic contents
         Product product = Product.builder()
-                .id(UUID.randomUUID().toString())
+                .id(productId)
                 .title(request.title())
                 .description(request.description())
                 .price(request.price())
                 .quantity(request.quantity())
+                .notHidden(true)
                 .build();
 
         // Add details objects to product
@@ -44,7 +46,13 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
         product.setDetails(details);
 
-        List<Category> categories = categoryRepository.findByNameIn(request.categories());
+        List<Category> categories = request.categories().stream()
+                .map(s -> Category.builder()
+                        .name(s)
+                        .product(Product.builder().id(productId).build())
+                        .build())
+                .toList();
+
         product.setCategories(categories);
         product = repository.save(product);
         return product.getId();
@@ -57,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
             fileNames.add(imageService.saveImage(file, productId));
         }
         List<Picture> pictures = fileNames.stream().map(Picture::new).toList();
-        product.setPictures(pictures);
+        product.getPictures().addAll(pictures);
         repository.save(product);
         return fileNames;
     }

@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,13 +25,13 @@ public class Product {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = ALL)
     private List<Detail> details = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = ALL)
     private List<Picture> pictures = new ArrayList<>();
     private Double price;
     private Integer quantity;
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = ALL)
     private List<Category> categories = new ArrayList<>();
     @CreatedDate
     @Column(nullable = false, updatable = false)
