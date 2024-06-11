@@ -15,21 +15,16 @@
 
 > prefix: `../users/..`
 
-|           Path            | Method | Role |         Description          |
-|:-------------------------:|:------:|:----:|:----------------------------:|
-|        ../profile         |  GET   | ANY  |   to get the user profile    |
-|        ../password        |  POST  | ANY  |      to change password      |
-|         ../orders         |  GET   | ANY  |      to get all orders       |
-|    ../orders/<  id  >     |  GET   | ANY  |    to get specific order     |
-|         ../carts          |  GET   | ANY  |       to get all carts       |
-| ../carts/<  product_id  > |  GET   | ANY  | to get specific product cart |
-|       ../addresses        |  GET   | ANY  |     to get all addresses     |
-|   ../addresses/<  id  >   |  GET   | ANY  |   to get specific address    |
-|       ../addresses        |  POST  | ANY  |      to add new address      |
-|   ../addresses/<  id  >   | PATCH  | ANY  |   to edit specific address   |
-|    ../addresses/< id >    | DELETE | ANY  |  to delete specific address  |
-|        ../payments        |  GET   | ANY  |  to get all saved payments   |
-|        ../reviews         |  GET   | ANY  |   to get all given reviews   |
+|        Path        | Method | Role |                             Description                             |
+|:------------------:|:------:|:----:|:-------------------------------------------------------------------:|
+|      ../auth       |  GET   | ANY  | used by `Authorization Server` for authentication and authorization |
+|         ..         |  POST  | ANY  |                       creating a user account                       |
+|     ../profile     |  GET   | ANY  |                         getting own profile                         |
+|    ../password     |  PUT   | ANY  |                        changing the password                        |
+|     ../address     |  POST  | ANY  |                      create or add new address                      |
+|     ../address     |  GET   | ANY  |                        get all user address                         |
+| ../address/ < id > |  GET   | ANY  |                    get specific address of user                     |
+| ../address/ < id > | DELETE | ANY  |                        to delete an address                         |
 
 ### Product
 
