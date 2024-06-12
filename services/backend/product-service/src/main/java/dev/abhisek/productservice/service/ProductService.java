@@ -25,4 +25,6 @@ public interface ProductService {
     void toggleVisibility(String id);
 
     List<ProductResponse> getAllHiddenProducts();
+
+    void deleteProduct(String id);
 }

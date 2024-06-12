@@ -61,4 +61,10 @@ public class ProductController {
     public ResponseEntity<List<ProductResponse>> getHiddenProduct() {
         return ResponseEntity.ok(service.getAllHiddenProducts());
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+        service.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
 }

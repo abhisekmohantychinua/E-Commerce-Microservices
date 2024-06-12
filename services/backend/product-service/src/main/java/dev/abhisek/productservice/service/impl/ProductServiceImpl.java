@@ -131,5 +131,10 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Override
+    public void deleteProduct(String id) {
+        repository.deleteById(id);
+    }
+
 
 }
