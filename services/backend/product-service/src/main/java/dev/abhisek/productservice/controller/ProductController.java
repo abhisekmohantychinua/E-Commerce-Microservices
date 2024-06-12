@@ -2,6 +2,7 @@ package dev.abhisek.productservice.controller;
 
 import dev.abhisek.productservice.dto.ProductRequest;
 import dev.abhisek.productservice.dto.ProductResponse;
+import dev.abhisek.productservice.dto.ProductUpdateRequest;
 import dev.abhisek.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,12 @@ public class ProductController {
     @GetMapping("{id}/pictures")
     public ResponseEntity<List<byte[]>> getPictures(@PathVariable String id) {
         return ResponseEntity.ok(service.getProductImages(id));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Void> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable String id) {
+        service.updateProduct(id, request);
+        return ResponseEntity.noContent().build();
     }
 
 }

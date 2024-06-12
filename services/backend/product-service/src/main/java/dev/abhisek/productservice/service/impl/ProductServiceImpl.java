@@ -2,6 +2,9 @@ package dev.abhisek.productservice.service.impl;
 
 import dev.abhisek.productservice.dto.ProductRequest;
 import dev.abhisek.productservice.dto.ProductResponse;
+import dev.abhisek.productservice.dto.ProductUpdateRequest;
+import dev.abhisek.productservice.entity.Category;
+import dev.abhisek.productservice.entity.Detail;
 import dev.abhisek.productservice.entity.Picture;
 import dev.abhisek.productservice.entity.Product;
 import dev.abhisek.productservice.mapper.ProductMapper;
@@ -62,5 +65,40 @@ public class ProductServiceImpl implements ProductService {
             pictureList.add(imageService.fetchImage(picture.getPath(), product.getId()));
         }
         return pictureList;
+    }
+
+    @Override
+    public void updateProduct(String id, ProductUpdateRequest request) {
+        Product product = findProductByProductId(id);
+        if (request.title() != null) {
+            product.setTitle(request.title());
+        }
+        if (request.description() != null) {
+            product.setDescription(request.description());
+        }
+        if (request.price() != null) {
+            product.setPrice(request.price());
+        }
+        if (request.quantity() != null) {
+            product.setQuantity(request.quantity());
+        }
+        if (request.details() != null) {
+            product.getDetails().clear();
+            product.getDetails().addAll(
+                    request.details().stream()
+                            .map(d -> Detail.builder().title(d.title()).body(d.body()).build())
+                            .toList());
+        }
+        if (request.categories() != null) {
+            product.getCategories().clear();
+            product.getCategories().addAll(
+                    request.categories().stream()
+                            .map(s -> Category.builder()
+                                    .name(s)
+                                    .product(Product.builder().id(id).build())
+                                    .build())
+                            .toList());
+        }
+        repository.save(product);
     }
 }

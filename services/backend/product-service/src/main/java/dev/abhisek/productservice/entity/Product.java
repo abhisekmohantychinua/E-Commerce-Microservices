@@ -25,13 +25,13 @@ public class Product {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @OneToMany(fetch = FetchType.EAGER, cascade = ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = ALL, orphanRemoval = true)
     private List<Detail> details = new ArrayList<>();
-    @OneToMany(cascade = ALL)
+    @OneToMany(cascade = ALL, orphanRemoval = true)
     private List<Picture> pictures = new ArrayList<>();
     private Double price;
     private Integer quantity;
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = ALL, orphanRemoval = true)
     private List<Category> categories = new ArrayList<>();
     @CreatedDate
     @Column(nullable = false, updatable = false)
