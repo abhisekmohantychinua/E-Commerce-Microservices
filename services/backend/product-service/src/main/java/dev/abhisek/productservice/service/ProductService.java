@@ -21,4 +21,6 @@ public interface ProductService {
     void updateProduct(String id, ProductUpdateRequest request);
 
     void removeProductImage(String id, String filename);
+
+    void toggleVisibility(String id);
 }

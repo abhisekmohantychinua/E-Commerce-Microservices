@@ -116,4 +116,11 @@ public class ProductServiceImpl implements ProductService {
         imageService.removeImage(filename, id);
         repository.save(product);
     }
+
+    @Override
+    public void toggleVisibility(String id) {
+        Product product = findProductByProductId(id);
+        product.setNotHidden(!product.getNotHidden());
+        repository.save(product);
+    }
 }

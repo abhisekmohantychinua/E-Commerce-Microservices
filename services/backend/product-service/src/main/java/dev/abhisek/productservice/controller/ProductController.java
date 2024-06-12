@@ -50,4 +50,10 @@ public class ProductController {
         service.removeProductImage(id, filename);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("{id}/hidden")
+    public ResponseEntity<Void> toggleVisibility(@PathVariable String id) {
+        service.toggleVisibility(id);
+        return ResponseEntity.noContent().build();
+    }
 }
