@@ -7,5 +7,5 @@ public interface ImageService {
 
     byte[] fetchImage(String fileName, String productId);
 
-    void updateImage(MultipartFile file, String fileName);
+    void removeImage(String fileName, String productId);
 }

@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -99,6 +101,19 @@ public class ProductServiceImpl implements ProductService {
                                     .build())
                             .toList());
         }
+        repository.save(product);
+    }
+
+    @Override
+    public void removeProductImage(String id, String filename) {
+        Product product = findProductByProductId(id);
+        Optional<Picture> optionalPicture = product.getPictures().stream()
+                .filter(p -> Objects.equals(p.getPath(), filename))
+                .findFirst();
+        optionalPicture.ifPresent(picture -> product.getPictures()
+                .remove(picture));
+
+        imageService.removeImage(filename, id);
         repository.save(product);
     }
 }

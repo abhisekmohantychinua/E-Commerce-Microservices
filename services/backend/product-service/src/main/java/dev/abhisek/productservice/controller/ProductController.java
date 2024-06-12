@@ -45,4 +45,9 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("{id}/pictures")
+    public ResponseEntity<Void> deleteProduct(@RequestParam String filename, @PathVariable String id) {
+        service.removeProductImage(id, filename);
+        return ResponseEntity.noContent().build();
+    }
 }

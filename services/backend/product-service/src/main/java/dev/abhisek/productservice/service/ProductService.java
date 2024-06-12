@@ -19,4 +19,6 @@ public interface ProductService {
     List<byte[]> getProductImages(String id);
 
     void updateProduct(String id, ProductUpdateRequest request);
+
+    void removeProductImage(String id, String filename);
 }

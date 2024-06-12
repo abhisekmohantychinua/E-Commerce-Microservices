@@ -62,7 +62,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void updateImage(MultipartFile file, String fileName) {
+    public void removeImage(String fileName, String productId) {
+        final String filePath = UPLOAD_PATH + separator + productId + separator + fileName;
+        Path path = Paths.get(filePath);
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);//
+        }
 
     }
 
