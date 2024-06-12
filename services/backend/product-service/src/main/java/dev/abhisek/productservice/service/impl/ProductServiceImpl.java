@@ -123,4 +123,13 @@ public class ProductServiceImpl implements ProductService {
         product.setNotHidden(!product.getNotHidden());
         repository.save(product);
     }
+
+    @Override
+    public List<ProductResponse> getAllHiddenProducts() {
+        return repository.findAllByNotHiddenFalse()
+                .stream().map(mapper::fromProduct)
+                .toList();
+    }
+
+
 }

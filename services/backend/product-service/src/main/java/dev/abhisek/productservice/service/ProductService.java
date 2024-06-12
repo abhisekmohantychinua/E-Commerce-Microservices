@@ -23,4 +23,6 @@ public interface ProductService {
     void removeProductImage(String id, String filename);
 
     void toggleVisibility(String id);
+
+    List<ProductResponse> getAllHiddenProducts();
 }

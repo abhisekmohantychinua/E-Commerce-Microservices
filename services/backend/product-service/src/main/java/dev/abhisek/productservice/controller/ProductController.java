@@ -56,4 +56,9 @@ public class ProductController {
         service.toggleVisibility(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("hidden")
+    public ResponseEntity<List<ProductResponse>> getHiddenProduct() {
+        return ResponseEntity.ok(service.getAllHiddenProducts());
+    }
 }
