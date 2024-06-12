@@ -52,4 +52,15 @@ public class ProductServiceImpl implements ProductService {
         return repository.findById(productId)
                 .orElseThrow();//todo- exception
     }
+
+    @Override
+    public List<byte[]> getProductImages(String id) {
+        Product product = findProductByProductId(id);
+        List<Picture> pictures = product.getPictures();
+        List<byte[]> pictureList = new ArrayList<>();
+        for (Picture picture : pictures) {
+            pictureList.add(imageService.fetchImage(picture.getPath(), product.getId()));
+        }
+        return pictureList;
+    }
 }

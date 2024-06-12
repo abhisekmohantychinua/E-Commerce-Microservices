@@ -13,4 +13,7 @@ public interface ProductService {
 
 
     List<String> addProductImages(MultipartFile[] files, String productId);
+
+
+    List<byte[]> getProductImages(String id);
 }

@@ -47,8 +47,18 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public byte[] fetchImage(String fileName) {
-        return new byte[0];
+    public byte[] fetchImage(String fileName, String productId) {
+        final String filePath = UPLOAD_PATH + separator + productId + separator + fileName;
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new RuntimeException();// todo-exception
+        }
+        Path path = file.toPath();
+        try {
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);// todo-exception
+        }
     }
 
     @Override
