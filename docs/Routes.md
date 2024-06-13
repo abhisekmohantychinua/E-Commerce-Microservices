@@ -30,14 +30,17 @@
 
 > prefix: `../products/..`
 
-|       Path        | Method | Role  |                       Description                        |
-|:-----------------:|:------:|:-----:|:--------------------------------------------------------:|
-|        ..         |  POST  | ADMIN |                     to add a product                     |
-|        ..         |  GET   |  ANY  | to add a product page (query parameters are in the code) |
-|     ../< id >     |  GET   |  ANY  |                 to get specific product                  |
-|     ../< id >     | PATCH  | ADMIN |                to edit a specific product                |
-|     ../< id >     | DELETE | ADMIN |               to toggle product visibility               |
-| ../< id >/reviews |  GET   |  ANY  |          to get all the reviews of the product           |
+|         Path         | Method | Role  |                       Description                        |
+|:--------------------:|:------:|:-----:|:--------------------------------------------------------:|
+|          ..          |  POST  | ADMIN |                     to add a product                     |
+| ../search/< pageNo > |  GET   |  ANY  | to get a product page (query parameters are in the code) |
+|      ../< id >       |  GET   |  ANY  |                 to get specific product                  |
+|  ../< id >/pictures  |  GET   |  ANY  |           to get pictures of specific product            |
+|      ../< id >       |  PUT   | ADMIN |                to edit a specific product                |
+|  ../< id >/pictures  |  PUT   | ADMIN |          to add pictures to a specific product           |
+|   ../< id >/hidden   |  PUT   | ADMIN |              toggle visibility of a product              |
+|      ../< id >       | DELETE | ADMIN |               to toggle product visibility               |
+|  ../< id >/pictures  | DELETE | ADMIN |                 delete specific product                  |
 
 ### Order and Cart
 

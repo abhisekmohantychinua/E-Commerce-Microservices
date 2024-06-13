@@ -6,7 +6,6 @@ import dev.abhisek.productservice.entity.Detail;
 import dev.abhisek.productservice.entity.Picture;
 import dev.abhisek.productservice.entity.Product;
 import dev.abhisek.productservice.mapper.ProductMapper;
-import dev.abhisek.productservice.repo.CategoryRepository;
 import dev.abhisek.productservice.repo.ProductRepository;
 import dev.abhisek.productservice.service.ImageService;
 import dev.abhisek.productservice.service.ProductService;
@@ -29,7 +28,6 @@ import static dev.abhisek.productservice.repo.ProductSpecifications.productInCri
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository repository;
-    private final CategoryRepository categoryRepository;
     private final ImageService imageService;
     private final ProductMapper mapper;
 
