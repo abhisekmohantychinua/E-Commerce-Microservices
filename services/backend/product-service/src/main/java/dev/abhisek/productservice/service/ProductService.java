@@ -1,8 +1,6 @@
 package dev.abhisek.productservice.service;
 
-import dev.abhisek.productservice.dto.ProductRequest;
-import dev.abhisek.productservice.dto.ProductResponse;
-import dev.abhisek.productservice.dto.ProductUpdateRequest;
+import dev.abhisek.productservice.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,4 +25,6 @@ public interface ProductService {
     List<ProductResponse> getAllHiddenProducts();
 
     void deleteProduct(String id);
+
+    ProductPage searchProduct(ProductCriteria criteria, Integer pageNo);
 }

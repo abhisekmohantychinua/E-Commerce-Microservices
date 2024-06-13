@@ -1,8 +1,6 @@
 package dev.abhisek.productservice.controller;
 
-import dev.abhisek.productservice.dto.ProductRequest;
-import dev.abhisek.productservice.dto.ProductResponse;
-import dev.abhisek.productservice.dto.ProductUpdateRequest;
+import dev.abhisek.productservice.dto.*;
 import dev.abhisek.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -66,5 +64,10 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         service.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("search/{pageNo}")
+    public ResponseEntity<ProductPage> searchProduct(@ModelAttribute ProductCriteria criteria, @PathVariable Integer pageNo) {
+        return ResponseEntity.ok(service.searchProduct(criteria, pageNo));
     }
 }

@@ -1,8 +1,6 @@
 package dev.abhisek.productservice.service.impl;
 
-import dev.abhisek.productservice.dto.ProductRequest;
-import dev.abhisek.productservice.dto.ProductResponse;
-import dev.abhisek.productservice.dto.ProductUpdateRequest;
+import dev.abhisek.productservice.dto.*;
 import dev.abhisek.productservice.entity.Category;
 import dev.abhisek.productservice.entity.Detail;
 import dev.abhisek.productservice.entity.Picture;
@@ -13,6 +11,10 @@ import dev.abhisek.productservice.repo.ProductRepository;
 import dev.abhisek.productservice.service.ImageService;
 import dev.abhisek.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static dev.abhisek.productservice.repo.ProductSpecifications.productInCriteria;
 
 @Service
 @RequiredArgsConstructor
@@ -134,6 +138,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(String id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public ProductPage searchProduct(ProductCriteria criteria, Integer pageNo) {
+        Pageable pageable = PageRequest.of(pageNo, 10);
+        Specification<Product> specification = productInCriteria(criteria);
+        Page<Product> productPage = repository.findAll(specification, pageable);
+        return mapper.toProductPage(productPage, pageNo);
     }
 
 
