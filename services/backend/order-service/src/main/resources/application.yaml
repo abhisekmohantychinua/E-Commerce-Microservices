@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: order-service
+    configserver: http://localhost:8888
+  config:
+    import: configserver:${spring.application.configserver}
