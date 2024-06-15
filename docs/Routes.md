@@ -59,14 +59,16 @@
 
 ### Review
 
-> prefix: `../review/..`
+> prefix: `../reviews/..`
 
-|       Path        | Method | Role |         Description          |
-|:-----------------:|:------:|:----:|:----------------------------:|
-| ../< product_id > |  POST  | ANY  | to add a review to a product |
-|     ../< id >     |  GET   | ANY  |   to get a specific review   |
-|     ../< id >     | PATCH  | ANY  |       to edit a review       |
-|     ../< id >     | DELETE | ANY  |  to delete specific review   |
+|           Path           | Method | Role |            Description            |
+|:------------------------:|:------:|:----:|:---------------------------------:|
+|            ..            |  POST  | ANY  |   to add a review to a product    |
+| ../products/< productId> |  GET   | ANY  | to get review on specific product |
+|            ..            |  GET   | ANY  |       get users all review        |
+|        ../< id >         |  GET   | ANY  |     to get a specific review      |
+|        ../< id >         | PATCH  | ANY  |         to edit a review          |
+|        ../< id >         | DELETE | ANY  |     to delete specific review     |
 
 ### Payment
 
