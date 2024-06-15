@@ -19,7 +19,7 @@ public class ProductSpecifications {
 
             // Quantity
             Predicate quantityPredicate;
-            if (request.showOutOfStock()) {
+            if (request.showOutOfStock() != null && request.showOutOfStock()) {
                 quantityPredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("quantity"), 0);
             } else {
                 quantityPredicate = criteriaBuilder.greaterThan(root.get("quantity"), 0);

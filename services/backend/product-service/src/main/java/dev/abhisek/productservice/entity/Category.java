@@ -13,7 +13,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column(length = 20, unique = true, updatable = false)
+    @Column(length = 20, updatable = false)
     private String name;
     @ManyToOne
     private Product product;

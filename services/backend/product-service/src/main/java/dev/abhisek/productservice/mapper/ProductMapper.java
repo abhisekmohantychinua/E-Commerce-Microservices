@@ -61,6 +61,7 @@ public class ProductMapper {
                 product.getQuantity(),
                 product.getCategories().stream()
                         .map(Category::getName)
+                        .map(String::toUpperCase)
                         .toList(),
                 product.getPictures().stream()
                         .map(Picture::getPath)

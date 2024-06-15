@@ -67,7 +67,7 @@ public class ProductController {
     }
 
     @GetMapping("search/{pageNo}")
-    public ResponseEntity<ProductPage> searchProduct(@ModelAttribute ProductCriteria criteria, @PathVariable Integer pageNo) {
+    public ResponseEntity<ProductPage> searchProduct(@RequestBody ProductCriteria criteria, @PathVariable Integer pageNo) {
         return ResponseEntity.ok(service.searchProduct(criteria, pageNo));
     }
 }
