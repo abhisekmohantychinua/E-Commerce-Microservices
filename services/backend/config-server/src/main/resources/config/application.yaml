@@ -14,3 +14,5 @@ services:
     user: http://localhost:8081/users
     #    product: lb://product-services
     product: http://localhost:8082/products
+    #    review: lb://product-services
+    review: http://localhost:8083/reviews
