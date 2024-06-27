@@ -46,16 +46,15 @@
 
 > prefix: `../onc/..`
 
-|       Path        | Method | Role |            Description            |
-|:-----------------:|:------:|:----:|:---------------------------------:|
-|        ..         |  POST  | ANY  |         to create a order         |
-|     ../< id >     | PATCH  | ANY  |          to edit a order          |
-| ../< id >/payment |  GET   | ANY  | to get payment status of an order |
-|      ../cart      |  POST  | ANY  |        add product to cart        |
-|      ../cart      | PATCH  | ANY  |      to edit a product cart       |
-|  ../cart/< id >   | DELETE | ANY  |   to remove product from a cart   |
-|      ../cart      | DELETE | ANY  |        to remove all carts        |
-| ../deliver/< id > |  POST  | ANY  |     make a product delivered      |
+|               Path               | Method | Role |              Description               |
+|:--------------------------------:|:------:|:----:|:--------------------------------------:|
+|                ..                |  POST  | ANY  |           to create a order            |
+|            ../< id >             | PATCH  | ANY  |            to edit a order             |
+|        ../< id >/payment         |  GET   | ANY  |   to get payment status of an order    |
+|        ../deliver/< id >         |  POST  | ANY  |        make a product delivered        |
+|             ../carts             |  POST  | ANY  | add or update existing product to cart |
+|             ../carts             |  GET   | ANY  |           get all user cart            |
+| ../carts/products/< product_id > | DELETE | ANY  |     to remove product from a cart      |
 
 ### Review
 
