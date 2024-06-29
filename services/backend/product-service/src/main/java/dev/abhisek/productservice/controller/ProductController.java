@@ -21,6 +21,11 @@ public class ProductController {
         return ResponseEntity.ok(service.addProduct(request));
     }
 
+    @GetMapping
+    public ResponseEntity<List<ProductResponse>> getProductDetails(@RequestBody List<String> productIds) {
+        return ResponseEntity.ok(service.getProductDetails(productIds));
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<ProductResponse> getProductDetails(@PathVariable String id) {
         return ResponseEntity.ok(service.getProductDetails(id));
@@ -35,6 +40,12 @@ public class ProductController {
     @GetMapping("{id}/pictures")
     public ResponseEntity<List<byte[]>> getPictures(@PathVariable String id) {
         return ResponseEntity.ok(service.getProductImages(id));
+    }
+
+    @PatchMapping
+    public ResponseEntity<Void> patchProductQuantity(List<ProductPatchRequest> requests) {
+        service.patchProductQuantity(requests);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id}")

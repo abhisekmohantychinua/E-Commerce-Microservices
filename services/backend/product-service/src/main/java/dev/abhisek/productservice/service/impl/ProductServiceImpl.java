@@ -37,6 +37,14 @@ public class ProductServiceImpl implements ProductService {
                 .getId();
     }
 
+    @Override
+    public List<ProductResponse> getProductDetails(List<String> productIds) {
+        List<Product> products = repository.findAllById(productIds);
+        return products.stream()
+                .map(mapper::fromProduct)
+                .toList();
+    }
+
     public List<String> addProductImages(MultipartFile[] files, String productId) {
         Product product = findProductByProductId(productId);
         List<String> fileNames = new ArrayList<>();
@@ -69,6 +77,20 @@ public class ProductServiceImpl implements ProductService {
             pictureList.add(imageService.fetchImage(picture.getPath(), product.getId()));
         }
         return pictureList;
+    }
+
+    @Override
+    public void patchProductQuantity(List<ProductPatchRequest> requests) {
+        List<Product> products = repository.findAllById(
+                requests.stream()
+                        .map(ProductPatchRequest::id)
+                        .toList());
+        products.forEach(product -> requests.stream()
+                .filter(r -> r.id().equals(product.getId()))
+                .findFirst()
+                .ifPresent(r -> product.setQuantity(r.quantity())));
+
+        repository.saveAll(products);
     }
 
     @Override

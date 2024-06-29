@@ -8,6 +8,8 @@ import java.util.List;
 public interface ProductService {
     String addProduct(ProductRequest request);
 
+    List<ProductResponse> getProductDetails(List<String> productIds);
+
     ProductResponse getProductDetails(String id);
 
 
@@ -15,6 +17,8 @@ public interface ProductService {
 
 
     List<byte[]> getProductImages(String id);
+
+    void patchProductQuantity(List<ProductPatchRequest> requests);
 
     void updateProduct(String id, ProductUpdateRequest request);
 
