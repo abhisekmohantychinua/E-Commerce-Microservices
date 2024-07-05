@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+security:
+  config:
+    introspectionUri: http://localhost:9000/oauth2/introspect
+    clientId: gateway
+    secret: secret
