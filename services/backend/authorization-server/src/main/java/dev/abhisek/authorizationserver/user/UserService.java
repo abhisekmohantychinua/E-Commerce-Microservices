@@ -14,7 +14,7 @@ import java.util.Optional;
 public class UserService {
     private final RestTemplate template = new RestTemplate();
 
-    //    todo- to be added in application.yaml
+
     @Value("${services.urls.user}")
     private String userUrl;
 

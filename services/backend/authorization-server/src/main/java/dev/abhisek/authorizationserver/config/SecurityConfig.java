@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,6 +46,18 @@ public class SecurityConfig {
     private final UserService userService;
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
+
+    private static KeyPair generateRsaKey() {
+        KeyPair keyPair;
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            keyPair = keyPairGenerator.generateKeyPair();
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
+        return keyPair;
+    }
 
     @Bean
     @Order(1)
@@ -77,7 +90,6 @@ public class SecurityConfig {
                 .orElseThrow(RuntimeException::new);// todo- handle exception properly
     }
 
-
     @Bean
     RegisteredClientRepository registeredClientRepository() {
         return new RegisteredClientRepository() {
@@ -102,7 +114,6 @@ public class SecurityConfig {
         };
     }
 
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();// todo- bcrypt password encoder
@@ -121,18 +132,6 @@ public class SecurityConfig {
         return new ImmutableJWKSet<>(jwkSet);
     }
 
-    private static KeyPair generateRsaKey() {
-        KeyPair keyPair;
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-            keyPair = keyPairGenerator.generateKeyPair();
-        } catch (Exception ex) {
-            throw new IllegalStateException(ex);
-        }
-        return keyPair;
-    }
-
     @Bean
     public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
@@ -145,12 +144,16 @@ public class SecurityConfig {
 
     @Bean
     OAuth2TokenCustomizer<OAuth2TokenClaimsContext> tokenCustomizer() {
-        return new OAuth2TokenCustomizer<OAuth2TokenClaimsContext>() {
-            @Override
-            public void customize(OAuth2TokenClaimsContext context) {
-                UserResponse userResponse = userService.getUserByUsername(context.getPrincipal().getName()).get();
-                context.getClaims().claim("user_id", userResponse.getId());
-            }
+        return context -> {
+            UserResponse userResponse = userService.getUserByUsername(context.getPrincipal().getName()).get();
+            context.getClaims().subject(userResponse.getId());
+            context.getClaims().claim(
+                    "role",
+                    userResponse
+                            .getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .toList()
+            );
         };
     }
 }
