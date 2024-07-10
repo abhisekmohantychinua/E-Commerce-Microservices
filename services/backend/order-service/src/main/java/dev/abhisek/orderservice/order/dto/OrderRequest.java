@@ -1,8 +1,10 @@
 package dev.abhisek.orderservice.order.dto;
 
-public record OrderRequestDto(
-        String userId,
-        String addressId,
+import java.util.List;
 
+public record OrderRequest(
+        String addressId,
+        List<ProductRequest> products,
+        String paymentMethod
 ) {
 }

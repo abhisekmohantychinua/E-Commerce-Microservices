@@ -21,7 +21,7 @@ public class CartServiceImpl implements CartServices {
 
     @Override
     public CartResponse createCart(CartRequest request, String userId) {
-        ProductResponse productResponse = productService.findProductById(request.productId());
+        ProductResponse productResponse = productService.findProductByIdForCarts(request.productId());
         Cart cart = repository.findCartByProductIdAndUserId(request.productId(), userId)
                 .orElse(new Cart());
         cart.setProductId(productResponse.id());
@@ -35,7 +35,7 @@ public class CartServiceImpl implements CartServices {
     public List<CartResponse> getAllUserCart(String userId) {
         return repository.findAllByUserId(userId)
                 .stream().map(c -> {
-                    ProductResponse response = productService.findProductById(c.getProductId());
+                    ProductResponse response = productService.findProductByIdForCarts(c.getProductId());
                     return new CartResponse(response, c.getQuantity());
                 })
                 .toList();
@@ -45,7 +45,7 @@ public class CartServiceImpl implements CartServices {
     public CartResponse getCartByProductId(String productId, String userId) {
         Cart cart = repository.findCartByProductIdAndUserId(productId, userId)
                 .orElseThrow();// todo - exception
-        ProductResponse response = productService.findProductById(cart.getProductId());
+        ProductResponse response = productService.findProductByIdForCarts(cart.getProductId());
         return new CartResponse(response, cart.getQuantity());
     }
 

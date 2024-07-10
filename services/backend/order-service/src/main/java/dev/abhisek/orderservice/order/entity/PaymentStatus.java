@@ -1,2 +1,5 @@
-package dev.abhisek.orderservice.order.entity;public enum PaymentStatus {
+package dev.abhisek.orderservice.order.entity;
+
+public enum PaymentStatus {
+    COMPLETED, PENDING, REFUND
 }

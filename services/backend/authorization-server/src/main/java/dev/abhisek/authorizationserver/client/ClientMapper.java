@@ -34,7 +34,7 @@ public class ClientMapper {
                 .scopes(scopes -> scopes.addAll(client.getScopes()))
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenFormat(REFERENCE)
-                        .refreshTokenTimeToLive(Duration.ofDays(1))
+                        .accessTokenTimeToLive(Duration.ofDays(1))
                         .build())
                 .build();
 

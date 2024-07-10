@@ -1,4 +1,7 @@
 package dev.abhisek.orderservice.order.services.external;
 
-public interface PaymetService {
+import org.springframework.cloud.openfeign.FeignClient;
+
+@FeignClient(name = "payment-service", url = "${services.urls.payment}")
+public interface PaymentService {
 }
