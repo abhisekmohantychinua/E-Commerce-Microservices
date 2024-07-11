@@ -5,9 +5,8 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
+
+import java.security.Principal;
 
 @Configuration
 public class RouteConfig {
@@ -66,16 +65,20 @@ public class RouteConfig {
 
     @Bean
     GatewayFilter gatewayFilter() {
-        return (exchange, chain) -> {
-            return ReactiveSecurityContextHolder.getContext()
-                    .map(SecurityContext::getAuthentication)
-                    .map(Authentication::getName)
-                    .flatMap(userId -> chain.filter(
-                            exchange
-                                    .mutate()
-                                    .request(r -> r.headers(h -> h.add("user_id", userId)))
-                                    .build()
-                    ));
-        };
+        return (exchange, chain) -> exchange.getPrincipal()
+                .map(Principal::getName)
+                .defaultIfEmpty("NONE")
+                .map(userId -> {
+                    if (!userId.equals("NONE")) {
+                        exchange.getRequest()
+                                .mutate()
+                                .header("user_id", userId)
+                                .build();
+                    }
+                    return exchange;
+                })
+                .flatMap(chain::filter);
+
+
     }
 }
