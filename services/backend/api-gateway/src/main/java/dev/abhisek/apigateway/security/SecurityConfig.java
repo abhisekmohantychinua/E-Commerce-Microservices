@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpMethod.*;
+
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
@@ -39,8 +41,26 @@ public class SecurityConfig {
                         ));
 
         http.authorizeExchange(e -> e
-                .anyExchange()
-                .authenticated());
+                // user-service
+                .pathMatchers(POST, "/users").permitAll()
+                .pathMatchers("/users/**").authenticated()
+                // product-service
+                .pathMatchers(POST, "/products").hasAuthority("ADMIN")
+                .pathMatchers(PUT, "/products/**").hasAuthority("ADMIN")
+                .pathMatchers(DELETE, "products/**").hasAuthority("ADMIN")
+                .pathMatchers(GET, "products/**").permitAll()
+                // review-service
+                .pathMatchers(GET, "/reviews/products/**").permitAll()
+                .pathMatchers("/reviews/**").authenticated()
+                // order-service
+                .pathMatchers("/orders/**", "/carts/**").authenticated()
+                // payment-service
+                .pathMatchers("/payments/**").authenticated()
+                // authorization-server
+                .pathMatchers("/oauth2/**", "/.well-known/**", "/logout").permitAll()
+                .anyExchange().authenticated());
+
+        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
 
         return http.build();
     }
