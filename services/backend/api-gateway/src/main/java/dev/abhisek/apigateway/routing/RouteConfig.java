@@ -56,7 +56,7 @@ public class RouteConfig {
                 )
                 // authorization-server
                 .route(r -> r
-                        .path("/oauth2/**", "/.well-known/**", "/logout")
+                        .path("/oauth2/**", "/.well-known/**")
                         .filters(f -> f.filter(gatewayFilter()))
                         .uri(authorizationServer)
                 )

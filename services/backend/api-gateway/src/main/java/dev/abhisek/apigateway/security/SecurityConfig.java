@@ -57,7 +57,7 @@ public class SecurityConfig {
                 // payment-service
                 .pathMatchers("/payments/**").authenticated()
                 // authorization-server
-                .pathMatchers("/oauth2/**", "/.well-known/**", "/logout").permitAll()
+                .pathMatchers("/oauth2/**", "/.well-known/**").permitAll()
                 .anyExchange().authenticated());
 
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);

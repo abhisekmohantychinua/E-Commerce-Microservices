@@ -1,0 +1,14 @@
+{
+  "name": "authorization-server",
+  "version": "1.0.0",
+  "description": "The npm build is required to use tailwind cli.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx tailwindcss -i ./css/input.css -o ./src/main/resources/static/output.css --watch"
+  },
+  "author": "Abhisek",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.4"
+  }
+}
