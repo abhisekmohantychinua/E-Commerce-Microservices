@@ -54,7 +54,7 @@ public class ProductSpecifications {
             // Details
             Predicate detailPredicate = criteriaBuilder.conjunction();
             if (request.details() != null && !request.details().isEmpty()) {
-                Join<Object, Object> detailJoin = root.join("detail");
+                Join<Object, Object> detailJoin = root.join("details");
                 List<Predicate> detailPredicates = new ArrayList<>();
                 for (DetailDto dto : request.details()) {
                     Predicate detailTitlePredicate = criteriaBuilder.equal(detailJoin.get("title"), dto.title());

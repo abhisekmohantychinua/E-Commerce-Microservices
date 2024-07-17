@@ -9,6 +9,7 @@ import dev.abhisek.reviewservice.mapper.ReviewMapper;
 import dev.abhisek.reviewservice.repo.ReviewRepository;
 import dev.abhisek.reviewservice.service.ReviewService;
 import dev.abhisek.reviewservice.service.external.ExternalService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -100,10 +101,14 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow();// todo - exception
         ProductResponse product = externalService.getProductByProductId(review.getProductId())
                 .orElseThrow();// todo - exception
+        if (!review.getUserId().equals(userId)) {
+            throw new RuntimeException();// todo - exception
+        }
         return mapper.toResponse(review, product, user);
     }
 
     @Override
+    @Transactional
     public void deleteReviewById(String id, String userId) {
         repository.deleteReviewByIdAndUserId(id, userId);
     }

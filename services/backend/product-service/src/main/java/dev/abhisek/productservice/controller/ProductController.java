@@ -43,7 +43,7 @@ public class ProductController {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> patchProductQuantity(List<ProductPatchRequest> requests) {
+    public ResponseEntity<Void> patchProductQuantity(@RequestBody List<ProductPatchRequest> requests) {
         service.patchProductQuantity(requests);
         return ResponseEntity.noContent().build();
     }

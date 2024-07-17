@@ -48,6 +48,8 @@ public class SecurityConfig {
                 .pathMatchers(POST, "/products").hasAuthority("ADMIN")
                 .pathMatchers(PUT, "/products/**").hasAuthority("ADMIN")
                 .pathMatchers(DELETE, "products/**").hasAuthority("ADMIN")
+                .pathMatchers(PATCH, "products/**").hasAuthority("ADMIN")
+                .pathMatchers(GET, "products/hidden").hasAuthority("ADMIN")
                 .pathMatchers(GET, "products/**").permitAll()
                 // review-service
                 .pathMatchers(GET, "/reviews/products/**").permitAll()
