@@ -19,3 +19,5 @@ services:
     #    order: lb://order-service
     order: http://localhost:8084/orders
     cart: http://localhost:8084/carts
+    #    payment: lb://payment-service
+    payment: http://localhost:8085/payments
