@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <link rel="icon" th:href="@{/logo.png}" type="image/png">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" th:href="@{/output.css}">
+    <title>Sign in</title>
+</head>
+<body class="bg-gray-300">
+<div class="mx-auto mt-10 max-w-96 rounded-sm border-2 border-gray-400 bg-cyan-300 p-5 text-center text-gray-800">
+    <!--    heading-->
+    <p class="text-4xl font-bold">Sign In</p>
+    <!-- inputs and buttons -->
+    <form class="mb-10 mt-10 rounded-md bg-white px-4 py-10" method="post" th:action="@{/payments/login}">
+        <!--    alerts-->
+        <p class="text-sm text-green-600" th:if="${param.logout}">Logged out successfully!</p>
+        <p class="text-sm text-red-600" th:if="${param.error}">Invalid credentials! Try again.</p>
+        <div class="flex flex-col justify-start gap-2 p-4 text-start">
+            <label class="text-xl font-semibold" for="email">Email</label>
+            <input class="scale-x-[0.99] border-b-2 border-gray-500 bg-transparent px-2 py-0.5 hover:scale-x-100 hover:border-gray-700 focus:scale-100 focus:border-gray-700 focus:outline-none"
+                   id="email" name="username" type="email"/>
+        </div>
+        <div class="flex flex-col justify-start gap-2 p-4 text-start">
+            <label class="text-xl font-semibold" for="password">Password</label>
+            <input class="scale-x-[0.99] border-b-2 border-gray-500 bg-transparent px-2 py-0.5 hover:scale-x-100 hover:border-gray-700 focus:scale-100 focus:border-gray-700 focus:outline-none"
+                   id="password" name="password" type="password"/>
+        </div>
+        <button class="mt-5 w-3/4 rounded-md bg-cyan-500 py-1 text-lg font-semibold shadow hover:scale-[1.02] hover:bg-cyan-500"
+                type="submit">
+            Login
+        </button>
+    </form>
+</div>
+
+</body>
+</html>
