@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
         products.forEach(product -> requests.stream()
                 .filter(r -> r.id().equals(product.getId()))
                 .findFirst()
-                .ifPresent(r -> product.setQuantity(r.quantity())));
+                .ifPresent(r -> product.setQuantity(product.getQuantity() + r.quantity()))); // r.quantity() follows sign representation. -ve means deduction and +ve means addition
 
         repository.saveAll(products);
     }

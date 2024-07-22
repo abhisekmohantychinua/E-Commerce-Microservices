@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static dev.abhisek.orderservice.order.entity.PaymentStatus.*;
 import static dev.abhisek.orderservice.order.entity.Status.YET_TO_DELIVER;
@@ -74,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             if (requestOptional.isPresent()) {
                 ProductRequest productRequest = requestOptional.get();
 
-                // If requested quantity is more that products quantity thr
+                // If requested quantity is more than products quantity thr
                 if (productRequest.quantity() > product.quantity()) {
                     throw new RuntimeException();// todo -exception
                 }
@@ -84,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
                 ProductPatchRequest patchRequest = new ProductPatchRequest(
                         product.id(),
-                        product.quantity() - productRequest.quantity()
+                        -productRequest.quantity()
                 );
                 patchRequests.add(patchRequest);
 
