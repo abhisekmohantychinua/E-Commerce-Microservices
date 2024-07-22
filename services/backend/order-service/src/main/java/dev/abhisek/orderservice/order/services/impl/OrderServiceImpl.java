@@ -106,12 +106,15 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalAmount(totalAmount);
 
         // create payment and set in order
-        // todo- implement after payment service
+        PaymentRequest paymentRequest = new PaymentRequest(totalAmount, request.paymentMethod(), userId);
+        PaymentResponse payment = paymentService.createPayment(paymentRequest);
+
+        order.setPaymentId(payment.id());
 
         // save and map to order response then return
         repository.save(order);
 
-        return mapper.fromOrder(order, address, null, orderLineResponses);
+        return mapper.fromOrder(order, address, payment, orderLineResponses);
     }
 
     @Override
@@ -124,8 +127,9 @@ public class OrderServiceImpl implements OrderService {
 
         List<AddressResponse> allUserAddress = userService.getAllUserAddress(userId);
         List<ProductResponse> allProducts = productService.findProductByIdForOrder(allProductIds);
-        // Fetch all user payments
-        return mapper.fromOrders(orders, allUserAddress, null, allProducts);
+        List<PaymentResponse> allPayments = paymentService.getPaymentByUserId(userId);
+
+        return mapper.fromOrders(orders, allUserAddress, allPayments, allProducts);
     }
 
     @Override
@@ -145,9 +149,75 @@ public class OrderServiceImpl implements OrderService {
             order.setPaymentStatus(REFUND);
             throw new RuntimeException(); // todo - exception
         } else if (order.getPaymentStatus() == PENDING) {
+            paymentService.deletePayment(order.getPaymentId());
             repository.delete(order);
         }
     }
 
+    @Override
+    public void completeOrder(String id) {
+        Order order = repository.findById(id)
+                .orElseThrow();// todo - exception
+        order.setPaymentStatus(COMPLETED);
+        repository.save(order);
+    }
+
+    @Override
+    public OrderResponse getOrderById(String id, String userId) {
+        Order order = repository.findByIdAndUserId(id, userId)
+                .orElseThrow();// todo - exception
+        AddressResponse address = userService.getAddressById(order.getAddressId(), userId);
+        if (address == null) {
+            throw new RuntimeException(); // todo - exception
+        }
+        order.setAddressId(address.id());
+
+        PaymentResponse payment = paymentService.getPaymentById(order.getPaymentId(), userId);
+        List<OrderLineResponse> orderLines = new ArrayList<>();
+        List<String> productIds = order.getOrderLines()
+                .stream().map(OrderLine::getProductId)
+                .collect(Collectors.toList());
+        List<ProductResponse> products = productService.findProductByIdForOrder(productIds);
+
+        for (OrderLine orderLine : order.getOrderLines()) {
+            ProductResponse product = products
+                    .stream().filter(p -> p.id().equals(orderLine.getProductId())
+                    ).findFirst().get();
+            OrderLineResponse response = new OrderLineResponse(product, orderLine.getQuantity());
+            orderLines.add(response);
+        }
+        return mapper.fromOrder(order, address, payment, orderLines);
+    }
+
+//    @Override
+//    public OrderResponse updateOrder(OrderRequest request, String id, String userId) {
+//        Order order = repository.findByIdAndUserId(id, userId)
+//                .orElseThrow();// todo - exception
+//
+//        AddressResponse address = userService.getAddressById(order.getAddressId(), userId);
+//        if (address == null) {
+//            throw new RuntimeException(); // todo - exception
+//        }
+//        order.setAddressId(address.id());
+//
+//        List<OrderLine> orderLines = order.getOrderLines();
+//        List<ProductPatchRequest> patchRequests = new ArrayList<>();
+//        // iterate and update order lines which are in new products
+//        int i;
+//        for (i = 0; i < orderLines.size(); i++) {
+//            OrderLine orderLine = orderLines.get(i);
+//            Optional<ProductRequest> optionalProduct = request.products().stream()
+//                    .filter(p -> p.productId().equals(orderLine.getProductId()))
+//                    .findFirst();
+//            if (optionalProduct.isPresent()) {
+//                ProductRequest product = optionalProduct.get();
+//                orderLine.setQuantity(product.quantity());
+//            }
+//        }
+//
+//        // iterate new products add those products to order line if not there
+//
+//        return null;
+//    }
 
 }

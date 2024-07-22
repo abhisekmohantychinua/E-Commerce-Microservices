@@ -11,4 +11,10 @@ public interface OrderService {
     List<OrderResponse> getAllUserOrder(String userId);
 
     void cancelOrder(String id, String userId);
+
+    void completeOrder(String id);
+
+    OrderResponse getOrderById(String id, String userId);
+
+//    OrderResponse updateOrder(OrderRequest request, String id, String userId);
 }

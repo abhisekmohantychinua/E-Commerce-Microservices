@@ -25,9 +25,20 @@ public class OrderController {
         return ResponseEntity.ok(service.getAllUserOrder(userId));
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<OrderResponse> getUserOrderById(@PathVariable String id, @RequestHeader("user_id") String userId) {
+        return ResponseEntity.ok(service.getOrderById(id, userId));
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Void> cancelOrder(@RequestHeader("user_id") String userId, @PathVariable String id) {
         service.cancelOrder(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("{id}/complete")
+    public ResponseEntity<Void> completeOrder(@PathVariable String id) {
+        service.completeOrder(id);
         return ResponseEntity.noContent().build();
     }
 }
