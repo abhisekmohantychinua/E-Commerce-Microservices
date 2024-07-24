@@ -22,4 +22,6 @@ public class Payment {
     private LocalDateTime createdAt;
     private LocalDateTime completedAt;
     private String userId;
+    @Indexed(unique = true)
+    private String orderId;
 }

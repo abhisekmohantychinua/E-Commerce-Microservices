@@ -22,7 +22,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getProductDetails(@RequestBody List<String> productIds) {
+    public ResponseEntity<List<ProductResponse>> getProductDetails(@RequestParam List<String> productIds) {
         return ResponseEntity.ok(service.getProductDetails(productIds));
     }
 

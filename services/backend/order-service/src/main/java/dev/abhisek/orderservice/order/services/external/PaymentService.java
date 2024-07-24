@@ -20,4 +20,7 @@ public interface PaymentService {
 
     @GetMapping("api/{id}")
     PaymentResponse getPaymentById(@PathVariable String id, @RequestHeader("user_id") String userId);
+
+    @PutMapping("api/{id}")
+    PaymentResponse updatePaymentAmount(@PathVariable String id, @RequestParam Double amount);
 }

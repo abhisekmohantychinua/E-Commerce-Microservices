@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -19,6 +19,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @Builder
 @Getter
 @Setter
+@Table(name = "_order")
 public class Order {
     @Id
     private String id;
@@ -33,7 +34,7 @@ public class Order {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @OneToMany(mappedBy = "order", fetch = EAGER, cascade = ALL)
     private List<OrderLine> orderLines;

@@ -35,6 +35,11 @@ public class PaymentApiController {
         return ResponseEntity.ok(service.updatePaymentType(paymentType, id, userId));
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<PaymentResponse> updatePaymentAmount(@PathVariable String id, @RequestParam Double amount) {
+        return ResponseEntity.ok(service.updatePaymentAmount(id, amount));
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable String id) {
         service.deletePayment(id);

@@ -16,5 +16,5 @@ public interface OrderService {
 
     OrderResponse getOrderById(String id, String userId);
 
-//    OrderResponse updateOrder(OrderRequest request, String id, String userId);
+    OrderResponse updateOrder(OrderRequest request, String id, String userId);
 }
