@@ -8,11 +8,15 @@ import dev.abhisek.paymentservice.mapper.PaymentMapper;
 import dev.abhisek.paymentservice.repo.PaymentRepository;
 import dev.abhisek.paymentservice.services.PaymentService;
 import dev.abhisek.paymentservice.services.external.OrderService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+
+import static java.time.LocalDateTime.now;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +29,11 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse createPayment(PaymentRequest request) {
         Payment payment = Payment.builder()
                 .id(UUID.randomUUID().toString())
+                .createdAt(now().format(formatter()))
                 .amount(request.amount())
                 .type(PaymentType.valueOf(request.paymentType()))
                 .userId(request.userId())
+                .orderId(request.orderId())
                 .build();
         payment = repository.save(payment);
         return mapper.fromPayment(payment);
@@ -68,6 +74,22 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void completePayment(String id, String userId) {
-        orderService.completeOrder(id);
+        Payment payment = repository.findById(id).orElseThrow();//todo -exception
+        payment.setCompletedAt(now().format(formatter()));
+        orderService.completeOrder(payment.getOrderId());
+        repository.save(payment);
+    }
+
+    @Override
+    public PaymentResponse updatePaymentAmount(String id, Double amount) {
+        Payment payment = repository.findById(id)
+                .orElseThrow();// todo - exception
+        payment.setAmount(amount);
+        payment = repository.save(payment);
+        return mapper.fromPayment(payment);
+    }
+
+    private @NotNull DateTimeFormatter formatter() {
+        return DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     }
 }

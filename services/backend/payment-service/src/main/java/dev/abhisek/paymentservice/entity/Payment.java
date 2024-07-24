@@ -18,9 +18,8 @@ public class Payment {
     private String id;
     private Double amount;
     private PaymentType type;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    private LocalDateTime completedAt;
+    private String createdAt;
+    private String completedAt;
     private String userId;
     @Indexed(unique = true)
     private String orderId;

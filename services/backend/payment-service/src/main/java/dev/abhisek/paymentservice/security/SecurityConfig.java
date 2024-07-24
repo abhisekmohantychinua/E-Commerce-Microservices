@@ -25,14 +25,14 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable);
         http
-                .authorizeHttpRequests(r -> r.requestMatchers("/api/**", "/output.css", "/logo.png").permitAll()
+                .authorizeHttpRequests(r -> r.requestMatchers("/payments/api/**", "/output.css", "/logo.png").permitAll()
                         .anyRequest().authenticated()
                 );
 
         http
                 .formLogin(l -> l.loginPage("/payments/signin")
                         .loginProcessingUrl("/payments/login")
-                        .successForwardUrl("/payments/dashboard")
+                        .defaultSuccessUrl("/payments/dashboard")
                         .permitAll())
                 .logout(l -> l.logoutUrl("/payments/logout")
                         .permitAll());

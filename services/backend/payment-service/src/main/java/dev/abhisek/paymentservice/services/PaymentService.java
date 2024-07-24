@@ -17,4 +17,6 @@ public interface PaymentService {
     void deletePayment(String id);
 
     void completePayment(String id, String userId);
+
+    PaymentResponse updatePaymentAmount(String id, Double amount);
 }
