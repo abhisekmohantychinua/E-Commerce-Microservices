@@ -12,21 +12,21 @@
 </head>
 <body>
 <!--navbar-->
-<nav class="w-screen bg-blue-600 h-16 p-5 flex justify-between items-center">
+<nav class="w-screen bg-blue-500 h-16 p-5 flex justify-between items-center">
     <img alt="logo" class="max-h-10" th:src="@{/logo.png}">
-    <div class="flex justify-around items-center text-white text-xl gap-4">
+    <div class="flex justify-around items-center text-blue-950 text-xl gap-4">
         <!--        todo - more items to be added-->
         <!--        user icon-->
         <div class="relative inline-block cursor-pointer" id="trigger">
             <i class="fa-solid fa-circle-user"></i>
-            <div class="hidden absolute bg-gray-100 py-4 px-2 min-w-44 shadow-2xl text-gray-900 text-base text-center right-0 z-50"
+            <div class="hidden absolute bg-blue-100 py-4 px-2 min-w-44 shadow-2xl text-blue-900 text-base text-center right-0 z-50"
                  id="menu">
                 <img alt="profile" class="rounded-full object-center mx-auto mb-5"
                      th:src="'data:image/jpg;base64,'+${profile}">
                 <!--                todo - to be fix in FIX-IMAGE -->
                 <p class="py-1 border-b" th:text="${user.fullName()}"></p>
                 <p class="py-1 border-b" th:text="${user.email()}"></p>
-                <button class="border text-red-500 border-red-500 bg-transparent px-4 py-2 mt-4 rounded-lg hover:border-0 hover:bg-red-500 hover:text-white"
+                <button class="border text-red-500 border-red-500 bg-transparent px-4 py-2 mt-4 rounded-md hover:border-0 hover:bg-red-500 hover:text-white"
                         onclick="window.location.href = '/payments/logout'" type="button">
                     Logout
                 </button>
@@ -43,7 +43,7 @@
     </p>
 
     <!--    payment card-->
-    <div class="w-4/5 mx-auto p-4 border-2 rounded-xl drop-shadow-sm shadow-gray-400 bg-gray-100 hover:drop-shadow-lg flex flex-col items-start justify-around gap-2"
+    <div class="w-4/5 mx-auto p-4 border-2 border-blue-200 rounded-xl drop-shadow-sm shadow-blue-400 bg-blue-100 hover:drop-shadow-lg flex flex-col items-start justify-around gap-2"
          th:classappend="${iterStat.first}?'mt-3' : 'mt-1'" th:each="payment,iterStat : ${payments}">
         <div class="flex justify-end w-full h-0">
             <p class="font-bold" th:classappend="${payment.status() == 'COMPLETE'?'text-green-500':'text-red-500'}"
@@ -52,8 +52,14 @@
         <p class="text-xl" th:text="${payment.id()}"></p>
         <div class="text-base inline-flex gap-2">Amount : <p class="font-semibold"
                                                              th:text="'&#8377;' + ${payment.amount()}"></p></div>
-        <div class="text-base inline-flex gap-2">Payment Type : <img alt="none" src="">
-            <p class="font-medium" th:text="${payment.paymentType().toUpperCase()}"></p></div>
+        <div class="text-base inline-flex gap-2" th:switch="${payment.paymentType().toUpperCase()}">Payment Type :
+            <img class="w-6" th:alt="${payment.paymentType()}" th:case="'UPI'" th:src="@{/upi.png}">
+            <img class="w-6" th:alt="${payment.paymentType()}" th:case="'NET_BANKING'" th:src="@{/bank.png}">
+            <img class="w-6" th:alt="${payment.paymentType()}" th:case="'CREDIT_CARD'" th:src="@{/cc.png}">
+            <img class="w-6" th:alt="${payment.paymentType()}" th:case="'DEBIT_CARD'" th:src="@{/dc.png}">
+            <img class="w-6" th:alt="${payment.paymentType()}" th:case="'CASH_ON_DELIVERY'" th:src="@{/cod.png}">
+            <p class="font-medium" th:text="${payment.paymentType().toUpperCase()}"></p>
+        </div>
         <p class="text-sm font-light" th:text="'Created At : ' + ${payment.createdAt()}"></p>
         <p class="text-sm font-light" th:if="${payment.paymentCompletedAt()}"
            th:text="'Payment Completed At : ' + ${payment.paymentCompletedAt()}"></p>

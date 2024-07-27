@@ -25,7 +25,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable);
         http
-                .authorizeHttpRequests(r -> r.requestMatchers("/payments/api/**", "/output.css", "/logo.png").permitAll()
+                .authorizeHttpRequests(r -> r.requestMatchers("/payments/api/**", "/output.css", "/**.png", "/**.jpeg").permitAll()
                         .anyRequest().authenticated()
                 );
 

@@ -1,3 +1,4 @@
+// USER MENU NAVBAR
 let trigger = document.getElementById('trigger')
 let menu = document.getElementById('menu')
 trigger.addEventListener('mouseover', () => {
