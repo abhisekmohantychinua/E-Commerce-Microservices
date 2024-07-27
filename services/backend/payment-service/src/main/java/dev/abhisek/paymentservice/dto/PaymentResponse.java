@@ -9,6 +9,7 @@ public record PaymentResponse(
         String paymentType,
         String createdAt,
         String status,
-        String paymentCompletedAt
+        String paymentCompletedAt,
+        PaymentDetailDto details
 ) {
 }

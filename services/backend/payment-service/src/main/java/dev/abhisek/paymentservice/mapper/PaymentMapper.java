@@ -4,6 +4,8 @@ import dev.abhisek.paymentservice.dto.PaymentResponse;
 import dev.abhisek.paymentservice.entity.Payment;
 import org.springframework.stereotype.Component;
 
+import static dev.abhisek.paymentservice.dto.PaymentDetailDto.getPaymentDetail;
+
 @Component
 public class PaymentMapper {
     public PaymentResponse fromPayment(Payment payment) {
@@ -14,7 +16,8 @@ public class PaymentMapper {
                 payment.getType().toString(),
                 payment.getCreatedAt(),
                 completedTime == null ? "INCOMPLETE" : "COMPLETE",
-                completedTime
+                completedTime,
+                getPaymentDetail(payment.getDetails())
         );
     }
 }

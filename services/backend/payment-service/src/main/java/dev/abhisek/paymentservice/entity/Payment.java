@@ -1,11 +1,10 @@
 package dev.abhisek.paymentservice.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.time.LocalDateTime;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Getter
 @Setter
@@ -23,4 +22,6 @@ public class Payment {
     private String userId;
     @Indexed(unique = true)
     private String orderId;
+    @DocumentReference
+    private PaymentDetails details;
 }

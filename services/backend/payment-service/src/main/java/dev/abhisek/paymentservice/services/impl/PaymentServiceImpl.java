@@ -1,8 +1,10 @@
 package dev.abhisek.paymentservice.services.impl;
 
+import dev.abhisek.paymentservice.dto.OrderResponse;
 import dev.abhisek.paymentservice.dto.PaymentRequest;
 import dev.abhisek.paymentservice.dto.PaymentResponse;
 import dev.abhisek.paymentservice.entity.Payment;
+import dev.abhisek.paymentservice.entity.PaymentDetails;
 import dev.abhisek.paymentservice.entity.PaymentType;
 import dev.abhisek.paymentservice.mapper.PaymentMapper;
 import dev.abhisek.paymentservice.repo.PaymentRepository;
@@ -73,8 +75,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void completePayment(String id, String userId) {
-        Payment payment = repository.findById(id).orElseThrow();//todo -exception
+    public <T extends PaymentDetails> void completePayment(String id, String userId, T details) {
+        Payment payment = repository.findByIdAndUserId(id, userId).orElseThrow();//todo -exception
+        payment.setDetails(details);
         payment.setCompletedAt(now().format(formatter()));
         orderService.completeOrder(payment.getOrderId());
         repository.save(payment);
@@ -87,6 +90,12 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setAmount(amount);
         payment = repository.save(payment);
         return mapper.fromPayment(payment);
+    }
+
+    @Override
+    public OrderResponse getOrderByPaymentId(String id, String userId) {
+        Payment payment = repository.findByIdAndUserId(id, userId).orElseThrow();//todo -exception
+        return orderService.getOrderDetails(payment.getOrderId(), userId);
     }
 
     private @NotNull DateTimeFormatter formatter() {

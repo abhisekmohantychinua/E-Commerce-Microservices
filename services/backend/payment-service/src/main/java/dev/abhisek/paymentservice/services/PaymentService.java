@@ -1,7 +1,9 @@
 package dev.abhisek.paymentservice.services;
 
+import dev.abhisek.paymentservice.dto.OrderResponse;
 import dev.abhisek.paymentservice.dto.PaymentRequest;
 import dev.abhisek.paymentservice.dto.PaymentResponse;
+import dev.abhisek.paymentservice.entity.PaymentDetails;
 
 import java.util.List;
 
@@ -16,7 +18,10 @@ public interface PaymentService {
 
     void deletePayment(String id);
 
-    void completePayment(String id, String userId);
+    <T extends PaymentDetails> void completePayment(String id, String userId, T details);
 
     PaymentResponse updatePaymentAmount(String id, Double amount);
+
+
+    OrderResponse getOrderByPaymentId(String id, String userId);
 }
