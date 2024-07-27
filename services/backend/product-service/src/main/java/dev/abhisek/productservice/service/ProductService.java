@@ -16,7 +16,7 @@ public interface ProductService {
     List<String> addProductImages(MultipartFile[] files, String productId);
 
 
-    List<byte[]> getProductImages(String id);
+    List<String> getProductImages(String id);
 
     void patchProductQuantity(List<ProductPatchRequest> requests);
 

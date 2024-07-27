@@ -4,6 +4,6 @@ public record UserProfileResponse(
         String email,
         String fullName,
         String role,
-        byte[] profile
+        String profileUrl
 ) {
 }

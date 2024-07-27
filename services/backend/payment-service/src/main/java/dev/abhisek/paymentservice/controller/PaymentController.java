@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -30,7 +29,6 @@ public class PaymentController {
         List<PaymentResponse> payments = service.getPaymentsByUserId(auth.getId());
         model.addAttribute("user", user);
         model.addAttribute("payments", payments);
-        model.addAttribute("profile", Base64.getEncoder().encodeToString(user.profile()));// todo - to be fix in FIX-IMAGE
         return "private/dashboard";
     }
 

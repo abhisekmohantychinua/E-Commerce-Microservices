@@ -10,6 +10,7 @@ import dev.abhisek.userservice.user.repo.UserRepository;
 import dev.abhisek.userservice.user.service.ImageService;
 import dev.abhisek.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
         user = repository.save(user);
         byte[] profile = imageService.fetchImage(user.getProfile());
-        return mapper.toUserResponse(user, profile);
+        return mapper.toUserResponse(user, profile, extractMimeType(user.getProfile()));
     }
 
     @Override
@@ -45,12 +46,12 @@ public class UserServiceImpl implements UserService {
         User user = repository.findById(id)
                 .orElseThrow();// todo- exception
         byte[] profile = imageService.fetchImage(user.getProfile());
-        return mapper.toUserResponse(user, profile);
+        return mapper.toUserResponse(user, profile, extractMimeType(user.getProfile()));
     }
 
     @Override
     public void updatePassword(NewPasswordRequest request) {
-        
+
     }
 
     private String saveProfileImage(MultipartFile profile, String email) {
@@ -59,5 +60,16 @@ public class UserServiceImpl implements UserService {
         return imageService.saveImage(profile, fileName);
     }
 
+    private String extractMimeType(String profile) {
+        String extension = profile.split("[.]")[1];
+        String mimeType;
+        if (extension.equalsIgnoreCase("png"))
+            mimeType = MediaType.IMAGE_PNG_VALUE;
+        else if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg"))
+            mimeType = MediaType.IMAGE_JPEG_VALUE;
+        else
+            throw new RuntimeException(); // todo-exception
+        return mimeType;
+    }
 
 }

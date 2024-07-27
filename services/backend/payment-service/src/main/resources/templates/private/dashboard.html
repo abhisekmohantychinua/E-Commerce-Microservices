@@ -22,8 +22,7 @@
             <div class="hidden absolute bg-blue-100 py-4 px-2 min-w-44 shadow-2xl text-blue-900 text-base text-center right-0 z-50"
                  id="menu">
                 <img alt="profile" class="rounded-full object-center mx-auto mb-5"
-                     th:src="'data:image/jpg;base64,'+${profile}">
-                <!--                todo - to be fix in FIX-IMAGE -->
+                     th:src="${user.profileUrl()}">
                 <p class="py-1 border-b" th:text="${user.fullName()}"></p>
                 <p class="py-1 border-b" th:text="${user.email()}"></p>
                 <button class="border text-red-500 border-red-500 bg-transparent px-4 py-2 mt-4 rounded-md hover:border-0 hover:bg-red-500 hover:text-white"

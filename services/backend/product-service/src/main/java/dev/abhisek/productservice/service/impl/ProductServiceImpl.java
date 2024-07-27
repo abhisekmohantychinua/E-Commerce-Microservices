@@ -14,13 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static dev.abhisek.productservice.repo.ProductSpecifications.productInCriteria;
 
@@ -69,12 +67,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<byte[]> getProductImages(String id) {
+    public List<String> getProductImages(String id) {
         Product product = findProductByProductId(id);
         List<Picture> pictures = product.getPictures();
-        List<byte[]> pictureList = new ArrayList<>();
+        List<String> pictureList = new ArrayList<>();
         for (Picture picture : pictures) {
-            pictureList.add(imageService.fetchImage(picture.getPath(), product.getId()));
+            byte[] pictureAsByte = imageService.fetchImage(picture.getPath(), product.getId());
+            String mimeType = extractMimeType(picture.getPath());
+            String url = getImageUrl(pictureAsByte, mimeType);
+            pictureList.add(url);
         }
         return pictureList;
     }
@@ -168,5 +169,24 @@ public class ProductServiceImpl implements ProductService {
         return mapper.toProductPage(productPage, pageNo);
     }
 
+    private String extractMimeType(String picture) {
+        String extension = picture.split("[.]")[1];
+        String mimeType;
+        if (extension.equalsIgnoreCase("png"))
+            mimeType = MediaType.IMAGE_PNG_VALUE;
+        else if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg"))
+            mimeType = MediaType.IMAGE_JPEG_VALUE;
+        else
+            throw new RuntimeException(); // todo-exception
+        return mimeType;
+    }
 
+    private String getImageUrl(byte[] picture, String mimeType) {
+        final String prefix = "data:";
+        final String mime = mimeType + ";";
+        final String encodingIndicator = "base64,";
+        final String data = Base64.getEncoder().encodeToString(picture);
+        final String url = prefix + mime + encodingIndicator + data;
+        return url;
+    }
 }

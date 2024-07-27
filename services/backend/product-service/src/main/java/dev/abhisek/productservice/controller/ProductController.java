@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     @GetMapping("{id}/pictures")
-    public ResponseEntity<List<byte[]>> getPictures(@PathVariable String id) {
+    public ResponseEntity<List<String>> getPictures(@PathVariable String id) {
         return ResponseEntity.ok(service.getProductImages(id));
     }
 
