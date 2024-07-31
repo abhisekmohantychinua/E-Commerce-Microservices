@@ -3,9 +3,8 @@ package dev.abhisek.paymentservice.services.impl;
 import dev.abhisek.paymentservice.dto.OrderResponse;
 import dev.abhisek.paymentservice.dto.PaymentRequest;
 import dev.abhisek.paymentservice.dto.PaymentResponse;
-import dev.abhisek.paymentservice.entity.Payment;
-import dev.abhisek.paymentservice.entity.PaymentDetails;
-import dev.abhisek.paymentservice.entity.PaymentType;
+import dev.abhisek.paymentservice.dto.UserResponse;
+import dev.abhisek.paymentservice.entity.*;
 import dev.abhisek.paymentservice.mapper.PaymentMapper;
 import dev.abhisek.paymentservice.repo.PaymentRepository;
 import dev.abhisek.paymentservice.services.PaymentService;
@@ -96,6 +95,48 @@ public class PaymentServiceImpl implements PaymentService {
     public OrderResponse getOrderByPaymentId(String id, String userId) {
         Payment payment = repository.findByIdAndUserId(id, userId).orElseThrow();//todo -exception
         return orderService.getOrderDetails(payment.getOrderId(), userId);
+    }
+
+
+    // todo - multiple exception
+    @Override
+    public PaymentDetails validateCredentials(String id, UserResponse auth, String paymentType, String bankCode, String cardNumber, String cardHolderName, String expirationDate, String cvv, String cardType, String address, String city, String zip, String phone) {
+        PaymentDetails details;
+        if (paymentType.equalsIgnoreCase("upi")) {
+            details = UPIPayment.builder()
+                    .id(UUID.randomUUID().toString())
+                    .upiId(auth.getId())
+                    .transactionId(UUID.randomUUID().toString())
+                    .build();
+        } else if (paymentType.equalsIgnoreCase("net_banking")) {
+            details = NetBankingPayment.builder()
+                    .id(UUID.randomUUID().toString())
+                    .bankCode(bankCode)
+                    .ifscCode(bankCode + "ifsc")
+                    .transactionId(UUID.randomUUID().toString())
+                    .authorizationCode(UUID.randomUUID().toString())
+                    .build();
+        } else if (paymentType.equalsIgnoreCase("credit_card") || paymentType.equalsIgnoreCase("debit_card")) {
+            details = CardPayment.builder()
+                    .id(UUID.randomUUID().toString())
+                    .bankCode(bankCode)
+                    .cardHolderName(cardHolderName)
+                    .cardNumber(cardNumber)
+                    .expirationDate(expirationDate)
+                    .cvv(cvv)
+                    .cardType(CardType.valueOf(cardType))
+                    .transactionId(UUID.randomUUID().toString())
+                    .build();
+        } else if (paymentType.equalsIgnoreCase("cash_on_delivery")) {
+            details = CODPayment.builder()
+                    .id(UUID.randomUUID().toString())
+                    .authorizationCode(UUID.randomUUID().toString())
+                    .status(Status.INCOMPLETE)
+                    .build();
+        } else {
+            throw new RuntimeException();// todo - exceptions
+        }
+        return details;
     }
 
     private @NotNull DateTimeFormatter formatter() {

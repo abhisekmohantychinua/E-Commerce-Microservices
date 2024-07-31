@@ -3,6 +3,7 @@ package dev.abhisek.paymentservice.services;
 import dev.abhisek.paymentservice.dto.OrderResponse;
 import dev.abhisek.paymentservice.dto.PaymentRequest;
 import dev.abhisek.paymentservice.dto.PaymentResponse;
+import dev.abhisek.paymentservice.dto.UserResponse;
 import dev.abhisek.paymentservice.entity.PaymentDetails;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface PaymentService {
 
 
     OrderResponse getOrderByPaymentId(String id, String userId);
+
+    PaymentDetails validateCredentials(String id, UserResponse auth, String paymentType, String bankCode, String cardNumber, String cardHolderName, String expirationDate, String cvv, String cardType, String address, String city, String zip, String phone);
 }

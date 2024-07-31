@@ -17,6 +17,9 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    configureEach {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
 }
 
 repositories {
@@ -36,6 +39,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'io.github.openfeign:feign-httpclient'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

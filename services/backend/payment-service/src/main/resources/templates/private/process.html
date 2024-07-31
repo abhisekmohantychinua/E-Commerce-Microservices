@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link rel="icon" th:href="@{/logo.png}" type="image/png">
+    <link rel="stylesheet" th:href="@{/output.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css}"/>
+    <title>Processing...</title>
+</head>
+<body class="bg-blue-50">
+<div class="container mx-auto shadow-lg bg-blue-100 p-5 h-screen flex flex-col justify-center items-center">
+    <div class="mx-auto border-2 rounded-full w-44 h-44 border-blue-300 border-t-blue-700 border-t-4 animate-spin mb-10"></div>
+    <p class="text-xl text-red-500 mx-auto">This is not an actual Payment provider. Select an option from below to
+        proceed.</p>
+    <form class="flex justify-around items-center p-5 mx-auto w-4/5" id="status-form" th:object="${details}">
+        <button class="w-2/5 rounded-md bg-red-700 py-1 text-lg text-gray-50 shadow-xl hover:bg-red-600"
+                onclick="onFailure()">
+            Failed
+        </button>
+        <button class="w-2/5 rounded-md bg-blue-700 py-1 text-lg text-gray-50 shadow-xl hover:bg-blue-600"
+                onclick="onSuccess()">
+            Success
+        </button>
+    </form>
+</div>
+
+
+<script th:src="@{/process.js}"></script>
+</body>
+</html>

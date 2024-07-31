@@ -7,6 +7,7 @@ import dev.abhisek.paymentservice.dto.UserResponse;
 import dev.abhisek.paymentservice.entity.PaymentDetails;
 import dev.abhisek.paymentservice.services.PaymentService;
 import dev.abhisek.paymentservice.services.external.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -47,10 +48,61 @@ public class PaymentController {
     }
 
     @PostMapping("{id}")
-    public <T extends PaymentDetails> String paymentComplete(@PathVariable String id, @AuthenticationPrincipal UserResponse auth, RedirectAttributes reAttr, @ModelAttribute T details) {
-        service.completePayment(id, auth.getId(), details);
-        reAttr.addFlashAttribute("paymentSuccessId", id);
-        return "redirect:dashboard";
+    public String processPayment(
+            @PathVariable String id,
+            @AuthenticationPrincipal UserResponse auth,
+            @RequestParam String paymentType,
+            @RequestParam(required = false) String bankCode,
+            @RequestParam(required = false) String cardNumber,
+            @RequestParam(required = false) String cardHolderName,
+            @RequestParam(required = false) String expirationDate,
+            @RequestParam(required = false) String cvv,
+            @RequestParam(required = false) String cardType,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String zip,
+            @RequestParam(required = false) String phone,
+            RedirectAttributes reAttr
+    ) {
+        PaymentDetails details = service.validateCredentials(id, auth, paymentType, bankCode, cardNumber, cardHolderName, expirationDate, cvv, cardType, address, city, zip, phone);
+        reAttr.addFlashAttribute("details", details);
+        reAttr.addFlashAttribute("id", id);
+        return "redirect:process";
     }
+
+    @GetMapping("process")
+    public String paymentProcess(@AuthenticationPrincipal UserResponse auth, Model model, HttpSession session) {
+        PaymentDetails paymentDetails = (PaymentDetails) model.getAttribute("details");
+        String id = (String) model.getAttribute("id");
+        session.setAttribute("details", paymentDetails);
+        session.setAttribute("id", id);
+        return "private/process";
+    }
+
+    @PostMapping("process")
+    public String paymentProcess(@AuthenticationPrincipal UserResponse auth, HttpSession session, RedirectAttributes reAttr, @RequestParam Boolean status) {
+        if (!status) {
+            return "redirect:complete?status=failed";
+        }
+        PaymentDetails details = (PaymentDetails) session.getAttribute("details");
+        String id = (String) session.getAttribute("id");
+        session.removeAttribute("details");
+        session.removeAttribute("id");
+        reAttr.addFlashAttribute("id", id);
+        reAttr.addFlashAttribute("details", details);
+        return "redirect:complete?status=success";
+    }
+
+    @GetMapping("complete")
+    public String paymentComplete(@RequestParam String status, Model model, @AuthenticationPrincipal UserResponse auth) {
+        if (status.equalsIgnoreCase("success")) {
+            PaymentDetails paymentDetails = (PaymentDetails) model.getAttribute("details");
+            String id = (String) model.getAttribute("id");
+            service.completePayment(id, auth.getId(), paymentDetails);
+            return "redirect:dashboard?status=success";
+        }
+        return "redirect:dashboard?status=failed";
+    }
+
 
 }
