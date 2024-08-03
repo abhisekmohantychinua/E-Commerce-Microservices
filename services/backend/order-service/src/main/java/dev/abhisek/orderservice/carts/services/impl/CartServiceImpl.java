@@ -7,6 +7,7 @@ import dev.abhisek.orderservice.carts.entity.Cart;
 import dev.abhisek.orderservice.carts.repo.CartRepository;
 import dev.abhisek.orderservice.carts.services.CartServices;
 import dev.abhisek.orderservice.order.services.external.ProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,7 @@ public class CartServiceImpl implements CartServices {
         return new CartResponse(response, cart.getQuantity());
     }
 
+    @Transactional
     @Override
     public void deleteProductCart(String productId, String userId) {
         repository.deleteByProductIdAndUserId(productId, userId);

@@ -36,10 +36,10 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<OrderResponse> updateOrder(@RequestBody OrderRequest request, @PathVariable String id, @RequestHeader("user_id") String userId) {
-        return ResponseEntity.ok(service.updateOrder(request, id, userId));
-    }
+//    @PutMapping("{id}")
+//    public ResponseEntity<OrderResponse> updateOrder(@RequestBody OrderRequest request, @PathVariable String id, @RequestHeader("user_id") String userId) {
+//        return ResponseEntity.ok(service.updateOrder(request, id, userId));
+//    }
 
     @PatchMapping("{id}/complete")
     public ResponseEntity<Void> completeOrder(@PathVariable String id) {

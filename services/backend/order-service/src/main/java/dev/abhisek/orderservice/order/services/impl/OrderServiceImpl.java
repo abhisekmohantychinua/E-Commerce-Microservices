@@ -190,7 +190,7 @@ public class OrderServiceImpl implements OrderService {
         return mapper.fromOrder(order, address, payment, orderLines);
     }
 
-    @Override
+    @Override// todo- To be fixed
     public OrderResponse updateOrder(OrderRequest request, String id, String userId) {
         // extract order from db
         Order order = repository.findByIdAndUserId(id, userId)
@@ -282,6 +282,7 @@ public class OrderServiceImpl implements OrderService {
         } else {
             payment = paymentService.getPaymentById(order.getPaymentId(), order.getUserId());
         }
+        repository.save(order);
         return mapper.fromOrder(order, address, payment, orderLineResponses);
     }
 
