@@ -3,6 +3,7 @@ package dev.abhisek.userservice.address.controller;
 import dev.abhisek.userservice.address.dto.AddressRequest;
 import dev.abhisek.userservice.address.dto.AddressResponse;
 import dev.abhisek.userservice.address.service.AddressService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class AddressController {
 
     @PostMapping
     public ResponseEntity<AddressResponse> createAddress(
-            @RequestBody AddressRequest request,
+            @RequestBody @Valid AddressRequest request,
             @RequestHeader(name = "user_id") String userId
     ) {
         return ResponseEntity.ok(service.createAddress(request, userId));

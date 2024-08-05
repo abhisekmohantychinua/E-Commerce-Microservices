@@ -4,6 +4,7 @@ import dev.abhisek.userservice.user.dto.NewPasswordRequest;
 import dev.abhisek.userservice.user.dto.UserRequest;
 import dev.abhisek.userservice.user.dto.UserResponse;
 import dev.abhisek.userservice.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class UserController {
     private final UserService service;
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<UserResponse> createUser(@ModelAttribute UserRequest request) {
+    public ResponseEntity<UserResponse> createUser(@ModelAttribute @Valid UserRequest request) {
         return ResponseEntity.ok(service.saveUser(request));
     }
 

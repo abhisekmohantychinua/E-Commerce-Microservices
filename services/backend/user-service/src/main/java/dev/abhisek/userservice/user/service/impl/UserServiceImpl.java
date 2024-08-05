@@ -1,5 +1,7 @@
 package dev.abhisek.userservice.user.service.impl;
 
+import dev.abhisek.userservice.exceptions.models.UnsupportedImageFormatException;
+import dev.abhisek.userservice.exceptions.models.UserNotFoundException;
 import dev.abhisek.userservice.user.dto.NewPasswordRequest;
 import dev.abhisek.userservice.user.dto.UserRequest;
 import dev.abhisek.userservice.user.dto.UserResponse;
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse findById(String id) {
         User user = repository.findById(id)
-                .orElseThrow();// todo- exception
+                .orElseThrow(() -> new UserNotFoundException("No User found on server with matching id: " + id));
         byte[] profile = imageService.fetchImage(user.getProfile());
         return mapper.toUserResponse(user, profile, extractMimeType(user.getProfile()));
     }
@@ -68,7 +70,7 @@ public class UserServiceImpl implements UserService {
         else if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg"))
             mimeType = MediaType.IMAGE_JPEG_VALUE;
         else
-            throw new RuntimeException(); // todo-exception
+            throw new UnsupportedImageFormatException("The image format is not supported.");
         return mimeType;
     }
 

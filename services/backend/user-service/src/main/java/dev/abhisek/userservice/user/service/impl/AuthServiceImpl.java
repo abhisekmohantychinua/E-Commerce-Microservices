@@ -1,5 +1,6 @@
 package dev.abhisek.userservice.user.service.impl;
 
+import dev.abhisek.userservice.exceptions.models.UserNotFoundException;
 import dev.abhisek.userservice.user.dto.AuthUserResponse;
 import dev.abhisek.userservice.user.mapper.UserMapper;
 import dev.abhisek.userservice.user.repo.UserRepository;
@@ -17,6 +18,6 @@ public class AuthServiceImpl implements AuthService {
     public AuthUserResponse findUserByUsername(String username) {
         return repository.findUserByEmail(username)
                 .map(mapper::toAuthUserResponse)
-                .orElseThrow();// todo- configure exceptions
+                .orElseThrow(() -> new UserNotFoundException("No User found on server matching with username: " + username));
     }
 }

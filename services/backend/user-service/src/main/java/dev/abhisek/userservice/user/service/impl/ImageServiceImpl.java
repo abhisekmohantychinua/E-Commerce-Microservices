@@ -1,5 +1,6 @@
 package dev.abhisek.userservice.user.service.impl;
 
+import dev.abhisek.userservice.exceptions.models.UnsupportedImageFormatException;
 import dev.abhisek.userservice.user.service.ImageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Value("${application.upload-path}")
     private String UPLOAD_PATH;
-    @Value("${application.default-profile}")
-    private String DEFAULT_PROFILE;
 
 
     @Override
@@ -31,8 +30,7 @@ public class ImageServiceImpl implements ImageService {
         if (!targetFolder.exists()) {
             boolean created = targetFolder.mkdirs();
             if (!created) {
-//                todo- exception
-                return DEFAULT_PROFILE;
+                throw new RuntimeException("Cannot create target folder for request");
             }
         }
         final String newFileName = fileName + System.currentTimeMillis() + "." + fileExtension;
@@ -42,21 +40,25 @@ public class ImageServiceImpl implements ImageService {
             Files.write(path, profile.getBytes());
             return newFileName;
         } catch (IOException e) {
-            throw new RuntimeException(e);// todo- handle exception
+            throw new RuntimeException(e);
         }
     }
 
     private String getFileExtension(String fileName) {
         if (fileName == null) {
-            throw new RuntimeException(); // todo- exception
+            throw new UnsupportedImageFormatException("There is no filename provided for image.");
         }
         final int dotIndex = fileName.lastIndexOf(".");
         if (dotIndex == -1) {
-            throw new RuntimeException(); // todo- exception
+            throw new UnsupportedImageFormatException("The filename is invalid.");
         }
-        return fileName
+        String extension = fileName
                 .substring(dotIndex + 1)
                 .toLowerCase();
+        if (!extension.equalsIgnoreCase("jpg") && !extension.equalsIgnoreCase("png") && !extension.equalsIgnoreCase("jpeg")) {
+            throw new UnsupportedImageFormatException("This image format '" + extension + "' is not supported.");
+        }
+        return extension;
     }
 
     @Override
@@ -66,7 +68,7 @@ public class ImageServiceImpl implements ImageService {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new RuntimeException(e);// todo-exception
+            throw new RuntimeException(e);
         }
     }
 }

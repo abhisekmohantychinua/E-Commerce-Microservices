@@ -7,6 +7,7 @@ import dev.abhisek.userservice.address.models.Address;
 import dev.abhisek.userservice.address.models.AddressType;
 import dev.abhisek.userservice.address.repo.AddressRepository;
 import dev.abhisek.userservice.address.service.AddressService;
+import dev.abhisek.userservice.exceptions.models.AddressNotFoundException;
 import dev.abhisek.userservice.user.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,13 +46,13 @@ public class AddressServiceImpl implements AddressService {
     public AddressResponse getUserAddressById(String id, String userId) {
         return repository.findAddressByIdAndUser(id, User.builder().id(userId).build())
                 .map(mapper::toAddressResponse)
-                .orElseThrow();// todo- exception
+                .orElseThrow(() -> new AddressNotFoundException("The requested address is not found on server."));
     }
 
     @Override
     public void deleteUserAddressById(String id, String userId) {
         Address address = repository.findAddressByIdAndUser(id, User.builder().id(userId).build())
-                .orElseThrow();// todo- exception
+                .orElseThrow(() -> new AddressNotFoundException("The requested address is not found on server."));
 
         repository.delete(address);
     }
