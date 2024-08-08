@@ -2,6 +2,7 @@ package dev.abhisek.productservice.controller;
 
 import dev.abhisek.productservice.dto.*;
 import dev.abhisek.productservice.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class ProductController {
     private final ProductService service;
 
     @PostMapping
-    public ResponseEntity<String> createProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<String> createProduct(@RequestBody @Valid ProductRequest request) {
         return ResponseEntity.ok(service.addProduct(request));
     }
 
@@ -43,13 +44,13 @@ public class ProductController {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> patchProductQuantity(@RequestBody List<ProductPatchRequest> requests) {
+    public ResponseEntity<Void> patchProductQuantity(@RequestBody @Valid List<ProductPatchRequest> requests) {
         service.patchProductQuantity(requests);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable String id) {
+    public ResponseEntity<Void> updateProduct(@RequestBody @Valid ProductUpdateRequest request, @PathVariable String id) {
         service.updateProduct(id, request);
         return ResponseEntity.noContent().build();
     }
@@ -78,7 +79,7 @@ public class ProductController {
     }
 
     @GetMapping("search/{pageNo}")
-    public ResponseEntity<ProductPage> searchProduct(@RequestBody ProductCriteria criteria, @PathVariable Integer pageNo) {
+    public ResponseEntity<ProductPage> searchProduct(@RequestBody @Valid ProductCriteria criteria, @PathVariable Integer pageNo) {
         return ResponseEntity.ok(service.searchProduct(criteria, pageNo));
     }
 }

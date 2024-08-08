@@ -5,6 +5,10 @@ import dev.abhisek.reviewservice.dto.ReviewRequest;
 import dev.abhisek.reviewservice.dto.ReviewResponse;
 import dev.abhisek.reviewservice.dto.UserResponse;
 import dev.abhisek.reviewservice.entity.Review;
+import dev.abhisek.reviewservice.exceptions.models.PermissionException;
+import dev.abhisek.reviewservice.exceptions.models.ProductNotFoundException;
+import dev.abhisek.reviewservice.exceptions.models.ReviewNotFoundException;
+import dev.abhisek.reviewservice.exceptions.models.UserNotFoundException;
 import dev.abhisek.reviewservice.mapper.ReviewMapper;
 import dev.abhisek.reviewservice.repo.ReviewRepository;
 import dev.abhisek.reviewservice.service.ReviewService;
@@ -26,9 +30,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse createReview(ReviewRequest request, String userId) {
         UserResponse user = externalService.getUserByUseId(userId)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new UserNotFoundException("No user found on server."));
         ProductResponse product = externalService.getProductByProductId(request.productId())
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new ProductNotFoundException("No product found on server with product id: " + request.productId()));
 
         Review review = Review.builder()
                 .id(UUID.randomUUID().toString())
@@ -44,11 +48,11 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewResponse> getAllUserReview(String userId) {
         UserResponse user = externalService.getUserByUseId(userId)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new UserNotFoundException("No user found on server."));
         return repository.findAllByUserId(userId)
                 .stream().map(r -> {
                     ProductResponse product = externalService.getProductByProductId(r.getProductId())
-                            .orElseThrow();// todo - exception
+                            .orElseThrow(() -> new ProductNotFoundException("No product found on server with product id: " + r.getProductId()));
                     return mapper.toResponse(r, product, user);
                 })
                 .toList();
@@ -57,11 +61,11 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewResponse> getAllProductReview(String productId) {
         ProductResponse product = externalService.getProductByProductId(productId)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new ProductNotFoundException("No product found on server with product id: " + productId));
         return repository.findAllByProductId(productId)
                 .stream().map(r -> {
                     UserResponse user = externalService.getUserByUseId(r.getUserId())
-                            .orElseThrow();// todo - exception
+                            .orElseThrow(() -> new UserNotFoundException("No user found on server."));
                     return mapper.toResponse(r, product, user);
                 })
                 .toList();
@@ -70,10 +74,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse editReview(ReviewRequest request, String id, String userId) {
         Review review = repository.findById(id)
-                .orElseThrow();// todo- exception
+                .orElseThrow(() -> new ReviewNotFoundException("No Review found on server with id: " + id));
 
-        if (review.getUserId().equals(userId)) {
-            throw new RuntimeException();// todo-exception
+        if (!review.getUserId().equals(userId)) {
+            throw new PermissionException("Can't edit other user's review.");
         }
 
         if (request.rating() != null) {
@@ -86,9 +90,9 @@ public class ReviewServiceImpl implements ReviewService {
 
         review = repository.save(review);
         UserResponse user = externalService.getUserByUseId(userId)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new UserNotFoundException("No user found on server."));
         ProductResponse product = externalService.getProductByProductId(request.productId())
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new ProductNotFoundException("No product found on server with product id: " + request.productId()));
 
         return mapper.toResponse(review, product, user);
     }
@@ -96,13 +100,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse getReviewById(String id, String userId) {
         Review review = repository.findById(id)
-                .orElseThrow();// todo- exception
+                .orElseThrow(() -> new ReviewNotFoundException("No review found on server with id: " + id));
         UserResponse user = externalService.getUserByUseId(userId)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new UserNotFoundException("No user found on server."));
         ProductResponse product = externalService.getProductByProductId(review.getProductId())
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new UserNotFoundException("No user found on server."));
         if (!review.getUserId().equals(userId)) {
-            throw new RuntimeException();// todo - exception
+            throw new PermissionException("Can't access other user review.");
         }
         return mapper.toResponse(review, product, user);
     }

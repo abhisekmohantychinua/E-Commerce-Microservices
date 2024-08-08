@@ -5,6 +5,8 @@ import dev.abhisek.productservice.entity.Category;
 import dev.abhisek.productservice.entity.Detail;
 import dev.abhisek.productservice.entity.Picture;
 import dev.abhisek.productservice.entity.Product;
+import dev.abhisek.productservice.exceptions.models.ProductNotFoundException;
+import dev.abhisek.productservice.exceptions.models.UnsupportedImageFormatException;
 import dev.abhisek.productservice.mapper.ProductMapper;
 import dev.abhisek.productservice.repo.ProductRepository;
 import dev.abhisek.productservice.service.ImageService;
@@ -63,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
 
     private Product findProductByProductId(String productId) {
         return repository.findById(productId)
-                .orElseThrow();//todo- exception
+                .orElseThrow(() -> new ProductNotFoundException("Requested product not available on server with id: " + productId));
     }
 
     @Override
@@ -177,7 +179,7 @@ public class ProductServiceImpl implements ProductService {
         else if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg"))
             mimeType = MediaType.IMAGE_JPEG_VALUE;
         else
-            throw new RuntimeException(); // todo-exception
+            throw new UnsupportedImageFormatException("The image format " + extension + " is not supported.");
         return mimeType;
     }
 
