@@ -130,3 +130,113 @@ parent services.
 - **Description**:
     - This error occurs when there is something unexpected occur in the server.
     - This error occurs when there is some IO error occurs during file handling.
+
+## Order Service (3YZ)
+
+All the error from the service begins with `3` and sub-service code for `order` is `1` and `cart` is `2` and some of are
+parent services.
+
+### INVALID_ARGUMENT
+
+- **Code**: 300
+- **Status**: 400 Bad Request
+- **Description**:
+    - This error occurs when invalid attributes/arguments provided.
+
+### UNSUPPORTED_OPERATION
+
+- **Code**: 305
+- **Status**: 405 Method Not Allowed
+- **Description**:
+    - This error occurs when you try to do something that is unsupported by the server.
+
+### OUT_OF_STOCK
+
+- **Code**: 307
+- **Status**: 409 Conflict
+- **Description**:
+    - This error occurs only when the requested product is out of stock.
+
+### CART_NOT_FOUND
+
+- **Code**: 324
+- **Status**: 404 Not Found
+- **Description**:
+    - This error occurs when the requested cart is not found on the server.
+
+### ORDER_NOT_FOUND
+
+- **Code**: 314
+- **Status**: 404 Not Found
+- **Description**:
+    - This error occurs when the requested order is not found on the server.
+
+### PRODUCT_NOT_FOUND
+
+- **Code**: 204
+- **Status**: 404 Not Found
+- **Description**:
+    - This error occurs when the requested product is not found on the server.
+
+### USER_NOT_FOUND
+
+- **Code**: 114
+- **Status**: 404 Not Found
+- **Description**:
+    - This error occurs when the requested user is not found on the server with provided credentials.
+
+### ADDRESS_NOT_FOUND
+
+- **Code**: 124
+- **Status**: 404 Not Found
+- **Description**:
+    - This error occurs when the requested address is not found on the server with provided credentials.
+
+### SERVER_ERROR
+
+- **Code**: 306
+- **Status**: 500 Internal Server Error
+- **Description**:
+    - This error occurs when something unexpected occurs in the server.
+    - This error occurs when there is some IO error during file handling.
+
+# Payment Service (4YZ)
+
+All the error from the service begins with `4` and no sub-service errors.
+
+### PAYMENT_NOT_FOUND
+
+- **Code**: 404
+- **Status**: 404 Not Found
+- **Description**:
+    - This error occurs when the requested payment is not found on the server.
+
+### ORDER_NOT_FOUND
+
+- **Code**: 314
+- **Status**: 404 Not Found
+- **Description**:
+    - This error occurs when the requested payment is not found on the server.
+
+### UNSUPPORTED_OPERATION
+
+- **Code**: 405
+- **Status**: 405 Method Not Allowed
+- **Description**:
+    - This error occurs when you try to do something that is unsupported by the server.
+
+### INVALID_CREDENTIALS
+
+- **Code**: 401
+- **Status**: 400 Bad Request
+- **Description**:
+    - This error occurs when invalid credentials are provided.
+    - This error occurs when invalid attributes/arguments are provided.
+
+### SERVER_ERROR
+
+- **Code**: 406
+- **Status**: 500 Internal Server Error
+- **Description**:
+    - This error occurs when something unexpected occurs in the server.
+    - This error occurs when there is some IO error.

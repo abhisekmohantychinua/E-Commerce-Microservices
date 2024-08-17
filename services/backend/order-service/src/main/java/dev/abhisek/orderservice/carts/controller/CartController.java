@@ -3,6 +3,7 @@ package dev.abhisek.orderservice.carts.controller;
 import dev.abhisek.orderservice.carts.dto.CartRequest;
 import dev.abhisek.orderservice.carts.dto.CartResponse;
 import dev.abhisek.orderservice.carts.services.CartServices;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class CartController {
     private final CartServices services;
 
     @PostMapping
-    public ResponseEntity<CartResponse> createCart(@RequestBody CartRequest request, @RequestHeader("user_id") String userId) {
+    public ResponseEntity<CartResponse> createCart(@RequestBody @Valid CartRequest request, @RequestHeader("user_id") String userId) {
         return ResponseEntity.ok(services.createCart(request, userId));
     }
 

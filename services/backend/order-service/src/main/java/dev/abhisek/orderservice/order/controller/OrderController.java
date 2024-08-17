@@ -3,6 +3,7 @@ package dev.abhisek.orderservice.order.controller;
 import dev.abhisek.orderservice.order.dto.OrderRequest;
 import dev.abhisek.orderservice.order.dto.OrderResponse;
 import dev.abhisek.orderservice.order.services.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class OrderController {
     private final OrderService service;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest request, @RequestHeader("user_id") String userId) {
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody @Valid OrderRequest request, @RequestHeader("user_id") String userId) {
         return ResponseEntity.ok(service.createOrder(request, userId));
     }
 

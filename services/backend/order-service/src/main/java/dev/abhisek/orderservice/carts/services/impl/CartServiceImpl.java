@@ -6,6 +6,7 @@ import dev.abhisek.orderservice.carts.dto.ProductResponse;
 import dev.abhisek.orderservice.carts.entity.Cart;
 import dev.abhisek.orderservice.carts.repo.CartRepository;
 import dev.abhisek.orderservice.carts.services.CartServices;
+import dev.abhisek.orderservice.exceptions.models.CartNotFoundException;
 import dev.abhisek.orderservice.order.services.external.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class CartServiceImpl implements CartServices {
     @Override
     public CartResponse getCartByProductId(String productId, String userId) {
         Cart cart = repository.findCartByProductIdAndUserId(productId, userId)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new CartNotFoundException("No cart found for your account on server with matching product id: " + productId));
         ProductResponse response = productService.findProductByIdForCarts(cart.getProductId());
         return new CartResponse(response, cart.getQuantity());
     }

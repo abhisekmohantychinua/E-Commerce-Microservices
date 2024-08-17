@@ -1,5 +1,6 @@
 package dev.abhisek.orderservice.carts.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,6 +19,7 @@ public class Cart {
     @GeneratedValue(strategy = AUTO)
     private Integer id;
     private String productId;
+    @Column(columnDefinition = "UNSIGNED INT(11)")
     private Integer quantity;
     private String userId;
 }

@@ -1,5 +1,9 @@
 package dev.abhisek.orderservice.order.services.impl;
 
+import dev.abhisek.orderservice.exceptions.models.AddressNotFoundException;
+import dev.abhisek.orderservice.exceptions.models.OrderNotFoundException;
+import dev.abhisek.orderservice.exceptions.models.OutOfStockException;
+import dev.abhisek.orderservice.exceptions.models.ProductNotFoundException;
 import dev.abhisek.orderservice.order.dto.*;
 import dev.abhisek.orderservice.order.entity.Order;
 import dev.abhisek.orderservice.order.entity.OrderLine;
@@ -46,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         // verify user address and set in order
         AddressResponse address = userService.getAddressById(request.addressId(), userId);
         if (address == null) {
-            throw new RuntimeException(); // todo - exception
+            throw new AddressNotFoundException("Provided address not found on your account, address id: " + request.addressId());
         }
         order.setAddressId(address.id());
 
@@ -58,7 +62,16 @@ public class OrderServiceImpl implements OrderService {
         List<ProductResponse> availableProduct = productService.findProductByIdForOrder(productIds);
 
         if (availableProduct.size() != request.products().size()) {
-            throw new RuntimeException(); // todo - exception
+            StringBuilder messageBuilder = new StringBuilder("Some of requested products are not found on server or out of stock. Those are [ ");
+            List<String> availableProductIds = availableProduct.stream()
+                    .map(ProductResponse::id)
+                    .toList();
+            productIds.forEach(id -> {
+                if (!availableProductIds.contains(id))
+                    messageBuilder.append(id).append(", ");
+            });
+            messageBuilder.append("]");
+            throw new ProductNotFoundException(messageBuilder.toString());
         }
 
 
@@ -77,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 
                 // If requested quantity is more than products quantity thr
                 if (productRequest.quantity() > product.quantity()) {
-                    throw new RuntimeException();// todo -exception
+                    throw new OutOfStockException("Product " + product.id() + " is out of stock for quantity " + productRequest.quantity() + ". Available quantity: " + product.quantity());
                 }
 
                 // Update total amount
@@ -136,19 +149,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void cancelOrder(String id, String userId) {
         Order order = repository.findById(id)
-                .orElseThrow();//todo - exception
+                .orElseThrow(() -> new OrderNotFoundException("Requested order not found on server with id: " + id));
 
         if (!order.getUserId().equals(userId)) {
-            throw new RuntimeException(); // todo - exception
+            throw new OrderNotFoundException("Requested order not found on server with id: " + id);
         }
 
         if (order.getStatus() == Status.DELIVERED) {
-            throw new RuntimeException(); // todo - exception
+            throw new UnsupportedOperationException("Cannot cancel an order if it is DELIVERED.");
         }
 
         if (order.getPaymentStatus() == COMPLETED) {
             order.setPaymentStatus(REFUND);
-            throw new RuntimeException(); // todo - exception
+            throw new UnsupportedOperationException("Cannot cancel an order if the payment is completed. Payment status is set for refund.");
         } else if (order.getPaymentStatus() == PENDING) {
             paymentService.deletePayment(order.getPaymentId());
             repository.delete(order);
@@ -158,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void completeOrder(String id) {
         Order order = repository.findById(id)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new OrderNotFoundException("Requested order not found on server with id: " + id));
         order.setPaymentStatus(COMPLETED);
         repository.save(order);
     }
@@ -166,10 +179,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse getOrderById(String id, String userId) {
         Order order = repository.findByIdAndUserId(id, userId)
-                .orElseThrow();// todo - exception
+                .orElseThrow(() -> new OrderNotFoundException("Requested product not found on server with id: " + id));
         AddressResponse address = userService.getAddressById(order.getAddressId(), userId);
         if (address == null) {
-            throw new RuntimeException(); // todo - exception
+            throw new AddressNotFoundException("Provided address not found on your account, address id: " + order.getAddressId());
         }
         order.setAddressId(address.id());
 

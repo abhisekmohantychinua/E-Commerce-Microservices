@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link rel="icon" th:href="@{/logo.png}" type="image/png">
+    <link rel="stylesheet" th:href="@{/output.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css}"/>
+    <title>Error</title>
+</head>
+<body>
+<div class="container mx-auto bg-blue-50 flex flex-col justify-start items-start gap-4 p-5 h-screen">
+    <!--    back button-->
+    <button class="rounded-full w-10 p-2 hover:bg-blue-200 cursor-pointer"
+            onclick="window.history.back()">
+        <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <p class="text-6xl text-blue-800 mx-auto mt-10" th:text="${error?.getCode()}">
+    </p>
+    <p class="text-xl text-blue-600 mx-auto" th:text="${error?.getStatus()}">
+
+    </p>
+    <ul class="p-2 list-disc mx-auto">
+        <li class="text-base text-red-600" th:each="message : ${error?.getMessages()}" th:text="${message}"></li>
+    </ul>
+    <ul class="p-2 list-none mx-auto">
+        <li class="text-base text-blue-600" th:each="detail : ${error?.getDetails()}" th:text="${detail}"></li>
+    </ul>
+</div>
+</body>
+</html>
