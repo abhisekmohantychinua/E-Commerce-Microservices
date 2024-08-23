@@ -5,6 +5,7 @@ public record ReviewResponse(
         int rating,
         String feedback,
         ProductResponse product,
-        UserResponse user
+        UserResponse user,
+        String postedAt
 ) {
 }

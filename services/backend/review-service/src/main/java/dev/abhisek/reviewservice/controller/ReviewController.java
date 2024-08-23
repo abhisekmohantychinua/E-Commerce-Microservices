@@ -3,6 +3,7 @@ package dev.abhisek.reviewservice.controller;
 import dev.abhisek.reviewservice.dto.ReviewRequest;
 import dev.abhisek.reviewservice.dto.ReviewResponse;
 import dev.abhisek.reviewservice.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class ReviewController {
 
     @PostMapping
     public ResponseEntity<ReviewResponse> createReview(
-            @RequestBody ReviewRequest request,
+            @RequestBody @Valid ReviewRequest request,
             @RequestHeader(name = "user_id") String userId
     ) {
         return ResponseEntity.ok(service.createReview(request, userId));

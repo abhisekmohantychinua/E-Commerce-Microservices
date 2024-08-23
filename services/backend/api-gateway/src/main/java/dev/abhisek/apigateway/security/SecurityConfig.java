@@ -9,8 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
-import org.springframework.security.oauth2.server.resource.introspection.NimbusReactiveOpaqueTokenIntrospector;
 import org.springframework.security.oauth2.server.resource.introspection.ReactiveOpaqueTokenIntrospector;
+import org.springframework.security.oauth2.server.resource.introspection.SpringReactiveOpaqueTokenIntrospector;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
@@ -57,7 +57,8 @@ public class SecurityConfig {
                 // order-service
                 .pathMatchers("/orders/**", "/carts/**").authenticated()
                 // payment-service
-                .pathMatchers("/payments/**").authenticated()
+                .pathMatchers("/payments/api/**").denyAll()
+                .pathMatchers("/payments/**").permitAll()
                 // authorization-server
                 .pathMatchers("/oauth2/**", "/.well-known/**").permitAll()
                 .anyExchange().authenticated());
@@ -70,7 +71,7 @@ public class SecurityConfig {
     @Bean
     ReactiveOpaqueTokenIntrospector introspector() {
         return token -> {
-            ReactiveOpaqueTokenIntrospector delegate = new NimbusReactiveOpaqueTokenIntrospector(introspectionUri, clientId, secret);
+            ReactiveOpaqueTokenIntrospector delegate = new SpringReactiveOpaqueTokenIntrospector(introspectionUri, clientId, secret);
             Mono<OAuth2AuthenticatedPrincipal> principal = delegate.introspect(token);
             return principal
                     .map(p -> new DefaultOAuth2AuthenticatedPrincipal(

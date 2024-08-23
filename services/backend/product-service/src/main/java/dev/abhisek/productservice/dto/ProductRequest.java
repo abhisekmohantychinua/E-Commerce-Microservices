@@ -20,11 +20,9 @@ public record ProductRequest(
         @NotEmpty(message = "Details must have at least one specification.")
         List<DetailDto> details,
         @NotNull(message = "Price is a required field")
-        @NotEmpty(message = "Price can not be empty.")
         @Min(value = 1, message = "Price must be positive floating value greater than zero.")
         Double price,
         @NotNull(message = "Quantity is a required field")
-        @NotEmpty(message = "Quantity can not be empty.")
         @Min(value = 1, message = "Quantity must be positive integer more than zero.")
         Integer quantity,
         @NotNull(message = "Categories is a required field")

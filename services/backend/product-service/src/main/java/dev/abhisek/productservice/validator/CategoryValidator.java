@@ -10,7 +10,7 @@ public class CategoryValidator implements ConstraintValidator<CategoryField, Lis
     @Override
     public boolean isValid(List<String> value, ConstraintValidatorContext context) {
         for (String s : value) {
-            if (s.length() > 100 || s.length() < 10)
+            if (s.length() > 100 || s.length() < 5)
                 return false;
 
 

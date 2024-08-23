@@ -15,7 +15,8 @@ public class ReviewMapper {
                 review.getRating(),
                 review.getFeedback(),
                 product,
-                user
+                user,
+                review.getCreatedAt().toString()
         );
     }
 }

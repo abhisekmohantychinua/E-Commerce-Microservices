@@ -30,15 +30,15 @@ public class PaymentApiController {
         return ResponseEntity.ok(service.getPaymentsByUserId(userId));
     }
 
-    @PatchMapping("{id}")
-    public ResponseEntity<PaymentResponse> updatePaymentType(@RequestParam String paymentType, @PathVariable String id, @RequestHeader("user_id") String userId) {
-        return ResponseEntity.ok(service.updatePaymentType(paymentType, id, userId));
-    }
+//    @PatchMapping("{id}")
+//    public ResponseEntity<PaymentResponse> updatePaymentType(@RequestParam String paymentType, @PathVariable String id, @RequestHeader("user_id") String userId) {
+//        return ResponseEntity.ok(service.updatePaymentType(paymentType, id, userId));
+//    }
 
-    @PutMapping("{id}")
-    public ResponseEntity<PaymentResponse> updatePaymentAmount(@PathVariable String id, @RequestParam Double amount) {
-        return ResponseEntity.ok(service.updatePaymentAmount(id, amount));
-    }
+//    @PutMapping("{id}")
+//    public ResponseEntity<PaymentResponse> updatePaymentAmount(@PathVariable String id, @RequestParam Double amount) {
+//        return ResponseEntity.ok(service.updatePaymentAmount(id, amount));
+//    }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable String id) {
