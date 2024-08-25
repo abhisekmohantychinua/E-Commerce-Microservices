@@ -1,6 +1,7 @@
 package dev.abhisek.authorizationserver.client;
 
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,9 @@ public class ClientMapper {
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenFormat(REFERENCE)
                         .accessTokenTimeToLive(Duration.ofDays(1))
+                        .build())
+                .clientSettings(ClientSettings.builder()
+                        .requireProofKey(true)
                         .build())
                 .build();
 
