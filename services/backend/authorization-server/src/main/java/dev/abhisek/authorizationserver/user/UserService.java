@@ -19,15 +19,20 @@ public class UserService {
     private String userUrl;
 
     public Optional<UserResponse> getUserByUsername(String username) {
-        ResponseEntity<UserResponse> userResponseResponseEntity = template
-                .getForEntity(userUrl + "/auth?username={username}", UserResponse.class, Map.of("username", username));
-        if (userResponseResponseEntity.getStatusCode().isError()) {
-            return Optional.empty();
+        try {
+            ResponseEntity<UserResponse> userResponseResponseEntity = template
+                    .getForEntity(userUrl + "/auth?username={username}", UserResponse.class, Map.of("username", username));
+            if (userResponseResponseEntity.getStatusCode().isError()) {
+                return Optional.empty();
+            }
+            UserResponse userResponse = userResponseResponseEntity.getBody();
+            if (userResponse == null) {
+                return Optional.empty();
+            }
+            return Optional.of(userResponse);
+        } catch (Exception e) {
+            // todo - logging
         }
-        UserResponse userResponse = userResponseResponseEntity.getBody();
-        if (userResponse == null) {
-            return Optional.empty();
-        }
-        return Optional.of(userResponse);
+        return Optional.empty();
     }
 }

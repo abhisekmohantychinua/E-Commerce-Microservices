@@ -9,6 +9,8 @@ import static org.springframework.http.HttpStatus.*;
 
 @Getter
 public enum BusinessError {
+    USER_SERVICE_DOWN("1**", SERVICE_UNAVAILABLE, "This error occurs when user-service is down or under maintenance."),
+    ORDER_SERVICE_DOWN("31*", SERVICE_UNAVAILABLE, "This error occurs when order-service is down or under maintenance."),
     PAYMENT_NOT_FOUND("404", NOT_FOUND, "This error occurs when the requested payment is not found on server."),
     ORDER_NOT_FOUND("314", NOT_FOUND, "This error occurs when the requested payment is not found on server."),
     UNSUPPORTED_OPERATION("405", METHOD_NOT_ALLOWED, "This error occurs when you try to do something i.e. unsupported by the server."),

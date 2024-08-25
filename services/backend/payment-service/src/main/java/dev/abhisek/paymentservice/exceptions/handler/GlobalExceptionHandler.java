@@ -1,21 +1,39 @@
 package dev.abhisek.paymentservice.exceptions.handler;
 
 import dev.abhisek.paymentservice.exceptions.dto.ExceptionResponse;
-import dev.abhisek.paymentservice.exceptions.models.InvalidCredentialException;
-import dev.abhisek.paymentservice.exceptions.models.OrderNotFoundException;
-import dev.abhisek.paymentservice.exceptions.models.PaymentNotFoundException;
+import dev.abhisek.paymentservice.exceptions.models.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.lang.UnsupportedOperationException;
 import java.util.List;
 
 import static dev.abhisek.paymentservice.exceptions.models.BusinessError.*;
 
 @ControllerAdvice(annotations = Controller.class)
 public class GlobalExceptionHandler {
+    @ExceptionHandler(ServiceDownException.class)
+    public String handleException(ServiceDownException e, Model model) {
+        String msg = e.getLocalizedMessage();
+        BusinessError error;
+        if (msg.contains("user"))
+            error = USER_SERVICE_DOWN;
+        else if (msg.contains("order"))
+            error = ORDER_SERVICE_DOWN;
+        else
+            throw new RuntimeException();
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(error.getCode())
+                .status(error.getStatus().toString())
+                .messages(List.of(msg.toUpperCase() + " is down or under maintenance."))
+                .details(error.getDescription())
+                .build();
+        model.addAttribute("error", response);
+        return "error-page";
+    }
 
     @ExceptionHandler(PaymentNotFoundException.class)
     public String handleException(PaymentNotFoundException e, Model model) {

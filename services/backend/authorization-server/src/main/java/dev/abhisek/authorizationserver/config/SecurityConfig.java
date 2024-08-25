@@ -13,6 +13,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -69,7 +70,7 @@ public class SecurityConfig {
     @Bean
     UserDetailsService userDetailsService() {
         return username -> userService.getUserByUsername(username)
-                .orElseThrow(RuntimeException::new);// todo- handle exception properly
+                .orElseThrow(() -> new UsernameNotFoundException("Requested username is not found on server."));
     }
 
     @Bean

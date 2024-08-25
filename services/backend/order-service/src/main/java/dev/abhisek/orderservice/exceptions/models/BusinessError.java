@@ -9,6 +9,9 @@ import static org.springframework.http.HttpStatus.*;
 
 @Getter
 public enum BusinessError {
+    PAYMENT_SERVICE_DOWN("5**", SERVICE_UNAVAILABLE, "This error occurs when payment-service is down or under maintenance"),
+    USER_SERVICE_DOWN("1**", SERVICE_UNAVAILABLE, "This error occurs when user-service is down or under maintenance"),
+    PRODUCT_SERVICE_DOWN("2**", SERVICE_UNAVAILABLE, "This error occurs when product-service is down or under maintenance"),
     INVALID_ARGUMENT("300", BAD_REQUEST, "This error occurs when invalid attributes/arguments provided."),
     UNSUPPORTED_OPERATION("305", METHOD_NOT_ALLOWED, "This error occurs when you try to do something i.e. unsupported by the server."),
     OUT_OF_STOCK("307", CONFLICT, "This error occurs only when requested product is out of stock."),

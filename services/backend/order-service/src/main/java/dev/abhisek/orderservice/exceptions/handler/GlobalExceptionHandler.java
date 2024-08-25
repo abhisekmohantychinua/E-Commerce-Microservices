@@ -17,6 +17,31 @@ import static dev.abhisek.orderservice.exceptions.models.BusinessError.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ServiceDownException.class)
+    public ResponseEntity<ExceptionResponse> handleException(ServiceDownException e) {
+        String msg = e.getLocalizedMessage();
+        BusinessError error;
+        if (msg.contains("user"))
+            error = USER_SERVICE_DOWN;
+        else if (msg.contains("product"))
+            error = PRODUCT_SERVICE_DOWN;
+        else if (msg.contains("payment"))
+            error = PAYMENT_SERVICE_DOWN;
+        else
+            throw new RuntimeException();
+        return ResponseEntity
+                .status(error.getStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .code(error.getCode())
+                                .status(error.getStatus().toString())
+                                .messages(List.of(msg.toUpperCase() + " is down or under maintenance."))
+                                .details(error.getDescription())
+                                .build()
+
+                );
+    }
+
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleException(ProductNotFoundException e) {
         return ResponseEntity

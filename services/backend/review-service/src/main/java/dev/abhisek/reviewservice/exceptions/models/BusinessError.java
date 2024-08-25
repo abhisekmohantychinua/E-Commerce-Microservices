@@ -9,6 +9,8 @@ import static org.springframework.http.HttpStatus.*;
 
 @Getter
 public enum BusinessError {
+    USER_SERVICE_DOWN("1**", SERVICE_UNAVAILABLE, "This error occurs when user-service is down or under maintenance."),
+    PRODUCT_SERVICE_DOWN("2**", SERVICE_UNAVAILABLE, "This error occurs when product-service is down or under maintenance."),
     INVALID_ARGUMENT("500", BAD_REQUEST, "This error occurs when invalid attributes/arguments provided."),
     USER_NOT_FOUND("114", NOT_FOUND, "This error occurs when requested user is not found on server with provided credentials."),
     PRODUCT_NOT_FOUND("204", NOT_FOUND, "This error occurs when requested product is not found on server."),

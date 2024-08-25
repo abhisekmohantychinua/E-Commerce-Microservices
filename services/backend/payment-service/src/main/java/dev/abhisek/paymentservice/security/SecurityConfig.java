@@ -1,6 +1,8 @@
 package dev.abhisek.paymentservice.security;
 
+import dev.abhisek.paymentservice.dto.UserResponse;
 import dev.abhisek.paymentservice.services.external.UserService;
+import feign.RetryableException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,7 +44,15 @@ public class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return userService::getUserByUsername;
+        return username -> {
+            UserResponse user;
+            try {
+                user = userService.getUserByUsername(username);
+            } catch (RetryableException e) {
+                throw new UsernameNotFoundException("Requested user is not found on server " + username);
+            }
+            return user;
+        };
     }
 
     @Bean

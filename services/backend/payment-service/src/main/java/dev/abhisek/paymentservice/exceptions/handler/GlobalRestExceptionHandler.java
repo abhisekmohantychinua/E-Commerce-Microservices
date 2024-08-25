@@ -1,9 +1,7 @@
 package dev.abhisek.paymentservice.exceptions.handler;
 
 import dev.abhisek.paymentservice.exceptions.dto.ExceptionResponse;
-import dev.abhisek.paymentservice.exceptions.models.InvalidCredentialException;
-import dev.abhisek.paymentservice.exceptions.models.OrderNotFoundException;
-import dev.abhisek.paymentservice.exceptions.models.PaymentNotFoundException;
+import dev.abhisek.paymentservice.exceptions.models.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.lang.UnsupportedOperationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +17,29 @@ import static dev.abhisek.paymentservice.exceptions.models.BusinessError.*;
 
 @RestControllerAdvice(annotations = RestController.class)
 public class GlobalRestExceptionHandler {
+    @ExceptionHandler(ServiceDownException.class)
+    public ResponseEntity<ExceptionResponse> handleException(ServiceDownException e) {
+        String msg = e.getLocalizedMessage();
+        BusinessError error;
+        if (msg.contains("user"))
+            error = USER_SERVICE_DOWN;
+        else if (msg.contains("order"))
+            error = ORDER_SERVICE_DOWN;
+        else
+            throw new RuntimeException();
+        return ResponseEntity
+                .status(error.getStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .code(error.getCode())
+                                .status(error.getStatus().toString())
+                                .messages(List.of(msg.toUpperCase() + " is down or under maintenance."))
+                                .details(error.getDescription())
+                                .build()
+
+                );
+    }
+
     @ExceptionHandler(PaymentNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleException(PaymentNotFoundException e) {
         return ResponseEntity

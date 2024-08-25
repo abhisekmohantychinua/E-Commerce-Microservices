@@ -1,10 +1,7 @@
 package dev.abhisek.reviewservice.exceptions.handler;
 
 import dev.abhisek.reviewservice.exceptions.dto.ExceptionResponse;
-import dev.abhisek.reviewservice.exceptions.models.PermissionException;
-import dev.abhisek.reviewservice.exceptions.models.ProductNotFoundException;
-import dev.abhisek.reviewservice.exceptions.models.ReviewNotFoundException;
-import dev.abhisek.reviewservice.exceptions.models.UserNotFoundException;
+import dev.abhisek.reviewservice.exceptions.models.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +15,27 @@ import static dev.abhisek.reviewservice.exceptions.models.BusinessError.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(ServiceDownException.class)
+    public ResponseEntity<ExceptionResponse> handleException(ServiceDownException e) {
+        BusinessError error = null;
+        if (e.getLocalizedMessage().equals("user"))
+            error = USER_SERVICE_DOWN;
+        else if (e.getLocalizedMessage().equals("product"))
+            error = PRODUCT_SERVICE_DOWN;
+        else
+            throw new RuntimeException();
+        return ResponseEntity
+                .status(error.getStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .code(error.getCode())
+                                .status(error.getStatus().toString())
+                                .details(error.getDescription())
+                                .messages(List.of(e.getLocalizedMessage().toUpperCase() + " service is down."))
+                                .build()
+                );
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleException(UserNotFoundException e) {
         return ResponseEntity

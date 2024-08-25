@@ -1,9 +1,6 @@
 package dev.abhisek.orderservice.order.services.impl;
 
-import dev.abhisek.orderservice.exceptions.models.AddressNotFoundException;
-import dev.abhisek.orderservice.exceptions.models.OrderNotFoundException;
-import dev.abhisek.orderservice.exceptions.models.OutOfStockException;
-import dev.abhisek.orderservice.exceptions.models.ProductNotFoundException;
+import dev.abhisek.orderservice.exceptions.models.*;
 import dev.abhisek.orderservice.order.dto.*;
 import dev.abhisek.orderservice.order.entity.Order;
 import dev.abhisek.orderservice.order.entity.OrderLine;
@@ -14,9 +11,11 @@ import dev.abhisek.orderservice.order.services.OrderService;
 import dev.abhisek.orderservice.order.services.external.PaymentService;
 import dev.abhisek.orderservice.order.services.external.ProductService;
 import dev.abhisek.orderservice.order.services.external.UserService;
+import feign.RetryableException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.UnsupportedOperationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +47,12 @@ public class OrderServiceImpl implements OrderService {
         List<OrderLine> orderLines = new ArrayList<>();
 
         // verify user address and set in order
-        AddressResponse address = userService.getAddressById(request.addressId(), userId);
+        AddressResponse address;
+        try {
+            address = userService.getAddressById(request.addressId(), userId);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("user");
+        }
         if (address == null) {
             throw new AddressNotFoundException("Provided address not found on your account, address id: " + request.addressId());
         }
@@ -59,8 +63,13 @@ public class OrderServiceImpl implements OrderService {
         List<String> productIds = request.products().stream()
                 .map(ProductRequest::productId)
                 .collect(Collectors.toList());
-        List<ProductResponse> availableProduct = productService.findProductByIdForOrder(productIds);
 
+        List<ProductResponse> availableProduct;
+        try {
+            availableProduct = productService.findProductByIdForOrder(productIds);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("product");
+        }
         if (availableProduct.size() != request.products().size()) {
             StringBuilder messageBuilder = new StringBuilder("Some of requested products are not found on server or out of stock. Those are [ ");
             List<String> availableProductIds = availableProduct.stream()
@@ -121,7 +130,13 @@ public class OrderServiceImpl implements OrderService {
 
         // create payment and set in order
         PaymentRequest paymentRequest = new PaymentRequest(totalAmount, request.paymentMethod(), order.getId(), userId);
-        PaymentResponse payment = paymentService.createPayment(paymentRequest);
+
+        PaymentResponse payment;
+        try {
+            payment = paymentService.createPayment(paymentRequest);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("payment");
+        }
 
         order.setPaymentId(payment.id());
 
@@ -138,10 +153,24 @@ public class OrderServiceImpl implements OrderService {
                 .flatMap(order -> order.getOrderLines().stream())
                 .map(OrderLine::getProductId)
                 .toList();
-
-        List<AddressResponse> allUserAddress = userService.getAllUserAddress(userId);
-        List<ProductResponse> allProducts = productService.findProductByIdForOrder(allProductIds);
-        List<PaymentResponse> allPayments = paymentService.getPaymentByUserId(userId);
+        List<AddressResponse> allUserAddress;
+        List<ProductResponse> allProducts;
+        List<PaymentResponse> allPayments;
+        try {
+            allUserAddress = userService.getAllUserAddress(userId);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("user");
+        }
+        try {
+            allProducts = productService.findProductByIdForOrder(allProductIds);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("product");
+        }
+        try {
+            allPayments = paymentService.getPaymentByUserId(userId);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("payment");
+        }
 
         return mapper.fromOrders(orders, allUserAddress, allPayments, allProducts);
     }
@@ -163,7 +192,11 @@ public class OrderServiceImpl implements OrderService {
             order.setPaymentStatus(REFUND);
             throw new UnsupportedOperationException("Cannot cancel an order if the payment is completed. Payment status is set for refund.");
         } else if (order.getPaymentStatus() == PENDING) {
-            paymentService.deletePayment(order.getPaymentId());
+            try {
+                paymentService.deletePayment(order.getPaymentId());
+            } catch (RetryableException e) {
+                throw new ServiceDownException("payment");
+            }
             repository.delete(order);
         }
     }
@@ -180,19 +213,33 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse getOrderById(String id, String userId) {
         Order order = repository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new OrderNotFoundException("Requested product not found on server with id: " + id));
-        AddressResponse address = userService.getAddressById(order.getAddressId(), userId);
+        AddressResponse address;
+        try {
+            address = userService.getAddressById(order.getAddressId(), userId);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("user");
+        }
         if (address == null) {
             throw new AddressNotFoundException("Provided address not found on your account, address id: " + order.getAddressId());
         }
         order.setAddressId(address.id());
 
-        PaymentResponse payment = paymentService.getPaymentById(order.getPaymentId(), userId);
+        PaymentResponse payment;
+        try {
+            payment = paymentService.getPaymentById(order.getPaymentId(), userId);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("payment");
+        }
         List<OrderLineResponse> orderLines = new ArrayList<>();
         List<String> productIds = order.getOrderLines()
                 .stream().map(OrderLine::getProductId)
                 .collect(Collectors.toList());
-        List<ProductResponse> products = productService.findProductByIdForOrder(productIds);
-
+        List<ProductResponse> products;
+        try {
+            products = productService.findProductByIdForOrder(productIds);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("product");
+        }
         for (OrderLine orderLine : order.getOrderLines()) {
             ProductResponse product = products
                     .stream().filter(p -> p.id().equals(orderLine.getProductId())

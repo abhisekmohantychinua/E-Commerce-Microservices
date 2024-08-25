@@ -8,10 +8,12 @@ import dev.abhisek.paymentservice.entity.*;
 import dev.abhisek.paymentservice.exceptions.models.InvalidCredentialException;
 import dev.abhisek.paymentservice.exceptions.models.OrderNotFoundException;
 import dev.abhisek.paymentservice.exceptions.models.PaymentNotFoundException;
+import dev.abhisek.paymentservice.exceptions.models.ServiceDownException;
 import dev.abhisek.paymentservice.mapper.PaymentMapper;
 import dev.abhisek.paymentservice.repo.PaymentRepository;
 import dev.abhisek.paymentservice.services.PaymentService;
 import dev.abhisek.paymentservice.services.external.OrderService;
+import feign.RetryableException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -83,7 +85,11 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseThrow(() -> new PaymentNotFoundException("Requested payment not found on server with id: " + id));
         payment.setDetails(details);
         payment.setCompletedAt(now().format(formatter()));
-        orderService.completeOrder(payment.getOrderId());
+        try {
+            orderService.completeOrder(payment.getOrderId());
+        } catch (RetryableException e) {
+            throw new ServiceDownException("order");
+        }
         repository.save(payment);
     }
 
@@ -100,7 +106,12 @@ public class PaymentServiceImpl implements PaymentService {
     public OrderResponse getOrderByPaymentId(String id, String userId) {
         Payment payment = repository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new PaymentNotFoundException("Requested payment not found on server with id: " + id));
-        OrderResponse orderDetails = orderService.getOrderDetails(payment.getOrderId(), userId);
+        OrderResponse orderDetails;
+        try {
+            orderDetails = orderService.getOrderDetails(payment.getOrderId(), userId);
+        } catch (RetryableException e) {
+            throw new ServiceDownException("order");
+        }
         if (orderDetails == null)
             throw new OrderNotFoundException("Requested order not found on server with id: " + payment.getOrderId());
 
