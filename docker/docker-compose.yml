@@ -9,6 +9,8 @@ services:
       - 27017:27017
     volumes:
       - mongo:/data
+    networks:
+      - mongo-db-net
 
   mysql:
     container_name: mysql-e-commerce
@@ -21,8 +23,126 @@ services:
       - 3306:3306
     volumes:
       - mysql:/var/lib/mysql
+    networks:
+      - mysql-db-net
+
+  config-server:
+    container_name: config-server
+    image: e-commerce-microservices/config-server:1.0
+    ports:
+      - 8888:8888
+    networks:
+      - private-net
+
+  service-registry:
+    container_name: service-registry
+    image: e-commerce-microservices/service-registry:1.0
+    ports:
+      - 8761:8761
+    networks:
+      - private-net
+    depends_on:
+      - config-server
+
+  authorization-server:
+    container_name: authorization-server
+    image: e-commerce-microservices/authorization-server:1.0
+    ports:
+      - 9000:9000
+    networks:
+      - mongo-db-net
+      - private-net
+    depends_on:
+      - service-registry
+      - mongodb
+
+  user-service:
+    container_name: user-service
+    image: e-commerce-microservices/user-service:1.0
+    ports:
+      - 8081:8081
+    volumes:
+      - user-v:/app
+    networks:
+      - mysql-db-net
+      - private-net
+    depends_on:
+      - service-registry
+      - mysql
+
+
+  product-service:
+    container_name: product-service
+    image: e-commerce-microservices/product-service:1.0
+    ports:
+      - 8082:8082
+    volumes:
+      - product-v:/app
+    networks:
+      - mysql-db-net
+      - private-net
+    depends_on:
+      - service-registry
+      - mysql
+
+  review-service:
+    container_name: review-service
+    image: e-commerce-microservices/review-service:1.0
+    ports:
+      - 8083:8083
+    networks:
+      - mysql-db-net
+      - private-net
+    depends_on:
+      - service-registry
+      - mysql
+
+
+  order-service:
+    container_name: order-service
+    image: e-commerce-microservices/order-service:1.0
+    ports:
+      - 8084:8084
+    networks:
+      - mysql-db-net
+      - private-net
+    depends_on:
+      - service-registry
+      - mysql
+
+  payment-service:
+    container_name: payment-service
+    image: e-commerce-microservices/payment-service:1.0
+    ports:
+      - 8085:8085
+    networks:
+      - mongo-db-net
+      - private-net
+    depends_on:
+      - service-registry
+      - mongodb
+
+  api-gateway:
+    container_name: api-gateway
+    image: e-commerce-microservices/api-gateway:1.0
+    ports:
+      - 8080:8080
+    networks:
+      - private-net
+    #      - public-net
+    depends_on:
+      - service-registry
 
 
 volumes:
   mongo:
   mysql:
+  user-v:
+  product-v:
+
+networks:
+  mongo-db-net:
+  mysql-db-net:
+  private-net:
+#  public-net
+

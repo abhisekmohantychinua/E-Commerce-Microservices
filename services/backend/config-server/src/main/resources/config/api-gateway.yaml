@@ -3,6 +3,6 @@ server:
 
 security:
   config:
-    introspectionUri: http://localhost:9000/oauth2/introspect
+    introspectionUri: http://authorization-server:9000/oauth2/introspect
     clientId: gateway
     secret: secret

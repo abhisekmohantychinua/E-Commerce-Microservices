@@ -7,6 +7,11 @@ plugins {
 group = 'dev.abhisek'
 version = '0.0.1-SNAPSHOT'
 
+bootJar {
+    archiveBaseName.set('config-server')
+    archiveVersion.set('1.0')
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -23,6 +28,7 @@ ext {
 
 dependencies {
     implementation 'org.springframework.cloud:spring-cloud-config-server'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

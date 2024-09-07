@@ -3,7 +3,7 @@ eureka:
     hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://service-registry:8761/eureka
 spring:
   cloud:
     config:
@@ -11,13 +11,13 @@ spring:
 services:
   urls:
     #    user: lb://user-service
-    user: http://localhost:8081/users
+    user: http://user-service:8081/users
     #    product: lb://product-service
-    product: http://localhost:8082/products
+    product: http://product-service:8082/products
     #    review: lb://product-service
-    review: http://localhost:8083/reviews
+    review: http://review-service:8083/reviews
     #    order: lb://order-service
-    order: http://localhost:8084/orders
-    cart: http://localhost:8084/carts
+    order: http://order-service:8084/orders
+    cart: http://order-service:8084/carts
     #    payment: lb://payment-service
-    payment: http://localhost:8085/payments
+    payment: http://payment-service:8085/payments

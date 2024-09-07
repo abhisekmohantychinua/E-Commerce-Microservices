@@ -7,6 +7,11 @@ plugins {
 group = 'dev.abhisek'
 version = '0.0.1-SNAPSHOT'
 
+bootJar {
+    archiveBaseName.set('review-service')
+    archiveVersion.set('1.0')
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -33,6 +38,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
