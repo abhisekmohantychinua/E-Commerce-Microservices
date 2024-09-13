@@ -1,3 +1,7 @@
+eureka:
+  instance:
+    hostname: api-gateway
+
 server:
   port: 8080
 

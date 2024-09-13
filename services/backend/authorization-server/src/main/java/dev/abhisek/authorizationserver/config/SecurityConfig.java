@@ -1,10 +1,12 @@
 package dev.abhisek.authorizationserver.config;
 
+import dev.abhisek.authorizationserver.client.Client;
 import dev.abhisek.authorizationserver.client.ClientMapper;
 import dev.abhisek.authorizationserver.client.ClientRepository;
 import dev.abhisek.authorizationserver.user.UserResponse;
 import dev.abhisek.authorizationserver.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,6 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -26,6 +31,8 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+
+import java.util.Optional;
 
 @Configuration
 @RequiredArgsConstructor
@@ -119,6 +126,38 @@ public class SecurityConfig {
                             .map(GrantedAuthority::getAuthority)
                             .toList()
             );
+        };
+    }
+
+    @Bean
+    CommandLineRunner defaultClientInitializer(RegisteredClientRepository registeredClientRepository) {
+        return args -> {
+            Optional<Client> client = clientRepository.findById("client");
+            if (client.isEmpty()) {
+                RegisteredClient registeredClient = RegisteredClient.withId("client")
+                        .clientId("client")
+                        .clientSecret("secret")
+                        .clientName("client")
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                        .redirectUri("http://example.com/authorize")
+                        .scope(OidcScopes.OPENID)
+                        .build();
+                registeredClientRepository.save(registeredClient);
+            }
+            client = clientRepository.findById("gateway");
+            if (client.isEmpty()) {
+                RegisteredClient registeredClient = RegisteredClient.withId("gateway")
+                        .clientId("gateway")
+                        .clientSecret("secret")
+                        .clientName("client")
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                        .redirectUri("http://example.com/authorize")
+                        .scope(OidcScopes.OPENID)
+                        .build();
+                registeredClientRepository.save(registeredClient);
+            }
         };
     }
 }

@@ -1,0 +1,7 @@
+.idea
+.gitignore
+HELP.md
+build
+.gradle
+gradle
+authorization-server.iml

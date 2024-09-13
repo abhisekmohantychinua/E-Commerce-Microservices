@@ -1,3 +1,6 @@
+eureka:
+  instance:
+    hostname: authorization-server
 spring:
   data:
     mongodb:
