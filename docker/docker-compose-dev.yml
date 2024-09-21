@@ -1,0 +1,35 @@
+services:
+  mongodb:
+    container_name: mongodb-e-commerce
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    volumes:
+      - ../db/mongodb:/data
+    networks:
+      - mongo-db-net
+
+  mysql:
+    container_name: mysql-e-commerce
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - 3306:3306
+    volumes:
+      - ../db/mysql:/var/lib/mysql
+    networks:
+      - mysql-db-net
+
+networks:
+  mongo-db-net:
+    driver: bridge
+  mysql-db-net:
+    driver: bridge
+  private-net:
+    driver: bridge

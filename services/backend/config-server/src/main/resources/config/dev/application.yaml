@@ -1,0 +1,16 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+spring:
+  cloud:
+    config:
+      override-system-properties: false
+services:
+  urls:
+    user: http://localhost:8081/users
+    product: http://localhost:8082/products
+    review: http://localhost:8083/reviews
+    order: http://localhost:8084/orders
+    cart: http://localhost:8084/carts
+    payment: http://localhost:8085/payments

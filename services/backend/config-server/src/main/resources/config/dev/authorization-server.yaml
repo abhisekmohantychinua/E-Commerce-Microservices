@@ -1,0 +1,14 @@
+eureka:
+  instance:
+    hostname: authorization-server
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      authentication-database: admin
+      username: root
+      password: password
+server:
+  port: 9000
+

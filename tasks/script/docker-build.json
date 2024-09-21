@@ -1,0 +1,65 @@
+[
+  {
+    "name": "config",
+    "tag": "e-commerce-config-server",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\config-server",
+    "dockerfile": "..\\docker\\backend\\config-server\\Dockerfile"
+  },
+  {
+    "name": "service",
+    "tag": "e-commerce-service-registry",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\service-registry",
+    "dockerfile": "..\\docker\\backend\\service-registry\\Dockerfile"
+  },
+  {
+    "name": "gateway",
+    "tag": "e-commerce-api-gateway",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\api-gateway",
+    "dockerfile": "..\\docker\\backend\\api-gateway\\Dockerfile"
+  },
+  {
+    "name": "authorization",
+    "tag": "e-commerce-authorization-server",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\authorization-server",
+    "dockerfile": "..\\docker\\backend\\authorization-server\\Dockerfile"
+  },
+  {
+    "name": "user",
+    "tag": "e-commerce-user-service",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\user-service",
+    "dockerfile": "..\\docker\\backend\\user-service\\Dockerfile"
+  },
+  {
+    "name": "product",
+    "tag": "e-commerce-product-service",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\product-service",
+    "dockerfile": "..\\docker\\backend\\product-service\\Dockerfile"
+  },
+  {
+    "name": "order",
+    "tag": "e-commerce-order-service",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\order-service",
+    "dockerfile": "..\\docker\\backend\\order-service\\Dockerfile"
+  },
+  {
+    "name": "payment",
+    "tag": "e-commerce-payment-service",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\payment-service",
+    "dockerfile": "..\\docker\\backend\\payment-service\\Dockerfile"
+  },
+  {
+    "name": "review",
+    "tag": "e-commerce-review-service",
+    "version": "1.0",
+    "context": "  ..\\services\\backend\\review-service",
+    "dockerfile": "..\\docker\\backend\\review-service\\Dockerfile"
+  }
+]

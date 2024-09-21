@@ -8,14 +8,9 @@ spring:
       override-system-properties: false
 services:
   urls:
-    #    user: lb://user-service
     user: http://user-service:8081/users
-    #    product: lb://product-service
     product: http://product-service:8082/products
-    #    review: lb://product-service
     review: http://review-service:8083/reviews
-    #    order: lb://order-service
     order: http://order-service:8084/orders
     cart: http://order-service:8084/carts
-    #    payment: lb://payment-service
     payment: http://payment-service:8085/payments

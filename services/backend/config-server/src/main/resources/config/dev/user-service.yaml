@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/user
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  servlet:
+    multipart:
+      max-file-size: 2MB
+
+application:
+  upload-path: ./uploads/profiles/
+  default-profile: default.png
+
+server:
+  port: 8081
+
+eureka:
+  instance:
+    hostname: user-service

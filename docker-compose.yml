@@ -28,17 +28,13 @@ services:
 
   config-server:
     container_name: config-server
-    build:
-      context: services/backend/config-server
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-config-server:latest
     networks:
       - private-net
 
   service-registry:
     container_name: service-registry
-    build:
-      context: services/backend/service-registry
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-service-registry:latest
     networks:
       - private-net
     ports:
@@ -49,9 +45,7 @@ services:
 
   authorization-server:
     container_name: authorization-server
-    build:
-      context: services/backend/authorization-server
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-authorization-server:latest
     networks:
       - mongo-db-net
       - private-net
@@ -64,9 +58,7 @@ services:
 
   user-service:
     container_name: user-service
-    build:
-      context: services/backend/user-service
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-user-service:latest
     volumes:
       - ./uploads:/app/uploads
     networks:
@@ -79,9 +71,7 @@ services:
 
   product-service:
     container_name: product-service
-    build:
-      context: services/backend/product-service
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-product-service:latest
     volumes:
       - ./uploads:/app/uploads
     networks:
@@ -94,9 +84,7 @@ services:
 
   review-service:
     container_name: review-service
-    build:
-      context: services/backend/review-service
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-review-service:latest
     networks:
       - mysql-db-net
       - private-net
@@ -107,9 +95,7 @@ services:
 
   order-service:
     container_name: order-service
-    build:
-      context: services/backend/order-service
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-order-service:latest
     networks:
       - mysql-db-net
       - private-net
@@ -117,9 +103,7 @@ services:
 
   payment-service:
     container_name: payment-service
-    build:
-      context: services/backend/payment-service
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-payment-service:latest
     networks:
       - mongo-db-net
       - private-net
@@ -132,9 +116,7 @@ services:
   
   api-gateway:
     container_name: api-gateway
-    build:
-      context: services/backend/api-gateway
-      dockerfile: Dockerfile
+    image: coderabhisek/e-commerce-api-gateway:latest
     networks:
       - private-net
     ports:

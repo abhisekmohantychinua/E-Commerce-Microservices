@@ -1,0 +1,20 @@
+{
+  "name": "tasks",
+  "version": "1.0.0",
+  "description": "This is for maintaining commands as script/task to make build and deployments automatic.",
+  "scripts": {
+    "docker-deploy": "docker-compose -f ../docker-compose.yml up -d",
+    "stop-docker-deploy": "docker-compose -f ../docker-compose.yml down",
+    "docker-database": "docker-compose -f ../docker/docker-compose-dev.yml up -d",
+    "stop-docker-database": "docker-compose -f ../docker/docker-compose-dev.yml down",
+    "docker-build": "node script/docker-build.js",
+    "docker-remove": "node script/docker-remove.js",
+    "docker-push": "node script/docker-push.js",
+    "test": "echo Hello World"
+  },
+  "author": "Abhisek Mohanty",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "dockerode": "^4.0.2"
+  }
+}
