@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-app
+  labels:
+    app: mysql-app
+  namespace: e-commerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-app
+  template:
+    metadata:
+      name: mysql-app
+      labels:
+        app: mysql-app
+    spec:
+      containers:
+        - name: mysql-app
+          image: mysql:8
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: ROOT_PASSWORD
+                  name: mysql-secret
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: USER
+                  name: mysql-secret
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: USER_PASSWORD
+                  name: mysql-secret
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-storage
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: e-commerce
+spec:
+  selector:
+    app: mysql-app
+  ports:
+    - port: 3306
+      targetPort: 3306
+      protocol: TCP

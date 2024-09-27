@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: uploads-pv
+  namespace: e-commerce
+  labels:
+    app: uploads-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: standard
+  local:
+    path: "/mnt/e-commerce/uploads"
+  capacity:
+    storage: "300Mi"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - minikube
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploads-pvc
+  namespace: e-commerce
+spec:
+  resources:
+    requests:
+      storage: "300Mi"
+  accessModes:
+    - ReadWriteMany
+  selector:
+    matchLabels:
+      app: uploads-pv
+  storageClassName: standard

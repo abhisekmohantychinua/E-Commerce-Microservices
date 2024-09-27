@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-app
+  namespace: e-commerce
+  labels:
+    app: order-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service-app
+  template:
+    metadata:
+      name: order-service-app
+      labels:
+        app: order-service-app
+    spec:
+      containers:
+        - name: order-service-app
+          image: coderabhisek/e-commerce-order-service:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8084
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  namespace: e-commerce
+spec:
+  selector:
+    app: order-service-app
+  ports:
+    - port: 8084
+      targetPort: 8084
+      protocol: TCP

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: review-service-app
+  namespace: e-commerce
+  labels:
+    app: review-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: review-service-app
+  template:
+    metadata:
+      name: review-service-app
+      labels:
+        app: review-service-app
+    spec:
+      containers:
+        - name: review-service-app
+          image: coderabhisek/e-commerce-review-service:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: review-service
+  namespace: e-commerce
+spec:
+  selector:
+    app: review-service-app
+  ports:
+    - port: 8083
+      targetPort: 8083
+      protocol: TCP

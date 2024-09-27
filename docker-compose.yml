@@ -28,13 +28,13 @@ services:
 
   config-server:
     container_name: config-server
-    image: coderabhisek/e-commerce-config-server:latest
+    image: coderabhisek/e-commerce-config-server:1.0
     networks:
       - private-net
 
   service-registry:
     container_name: service-registry
-    image: coderabhisek/e-commerce-service-registry:latest
+    image: coderabhisek/e-commerce-service-registry:1.0
     networks:
       - private-net
     ports:
@@ -45,7 +45,7 @@ services:
 
   authorization-server:
     container_name: authorization-server
-    image: coderabhisek/e-commerce-authorization-server:latest
+    image: coderabhisek/e-commerce-authorization-server:1.0
     networks:
       - mongo-db-net
       - private-net
@@ -58,7 +58,7 @@ services:
 
   user-service:
     container_name: user-service
-    image: coderabhisek/e-commerce-user-service:latest
+    image: coderabhisek/e-commerce-user-service:1.0
     volumes:
       - ./uploads:/app/uploads
     networks:
@@ -71,7 +71,7 @@ services:
 
   product-service:
     container_name: product-service
-    image: coderabhisek/e-commerce-product-service:latest
+    image: coderabhisek/e-commerce-product-service:1.0
     volumes:
       - ./uploads:/app/uploads
     networks:
@@ -84,7 +84,7 @@ services:
 
   review-service:
     container_name: review-service
-    image: coderabhisek/e-commerce-review-service:latest
+    image: coderabhisek/e-commerce-review-service:1.0
     networks:
       - mysql-db-net
       - private-net
@@ -95,7 +95,7 @@ services:
 
   order-service:
     container_name: order-service
-    image: coderabhisek/e-commerce-order-service:latest
+    image: coderabhisek/e-commerce-order-service:1.0
     networks:
       - mysql-db-net
       - private-net
@@ -103,7 +103,7 @@ services:
 
   payment-service:
     container_name: payment-service
-    image: coderabhisek/e-commerce-payment-service:latest
+    image: coderabhisek/e-commerce-payment-service:1.0
     networks:
       - mongo-db-net
       - private-net
@@ -116,7 +116,7 @@ services:
   
   api-gateway:
     container_name: api-gateway
-    image: coderabhisek/e-commerce-api-gateway:latest
+    image: coderabhisek/e-commerce-api-gateway:1.0
     networks:
       - private-net
     ports:

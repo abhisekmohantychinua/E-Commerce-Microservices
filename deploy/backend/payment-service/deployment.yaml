@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service-app
+  namespace: e-commerce
+  labels:
+    app: payment-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service-app
+  template:
+    metadata:
+      name: payment-service-app
+      labels:
+        app: payment-service-app
+    spec:
+      containers:
+        - name: payment-service-app
+          image: coderabhisek/e-commerce-payment-service:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8085
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  namespace: e-commerce
+spec:
+  selector:
+    app: payment-service-app
+  ports:
+    - port: 8085
+      targetPort: 8085
+      protocol: TCP
+  type: LoadBalancer

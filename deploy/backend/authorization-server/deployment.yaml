@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authorization-server-app
+  namespace: e-commerce
+  labels:
+    app: authorization-server-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authorization-server-app
+  template:
+    metadata:
+      name: authorization-server-app
+      labels:
+        app: authorization-server-app
+    spec:
+      containers:
+        - name: authorization-server-app
+          image: coderabhisek/e-commerce-authorization-server:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authorization-server
+  namespace: e-commerce
+spec:
+  selector:
+    app: authorization-server-app
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+
+  type: LoadBalancer

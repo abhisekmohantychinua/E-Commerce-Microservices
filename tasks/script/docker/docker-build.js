@@ -19,7 +19,7 @@ if (args.length === 2) {
     data.forEach(buildImage)
 } else if (args.length === 3) {
     data
-        .filter(obj => obj.name = args[2])
+        .filter(obj => obj.name === args[2])
         .forEach(buildImage)
 } else {
     console.log('Invalid arguments')

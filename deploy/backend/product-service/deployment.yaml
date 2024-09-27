@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service-app
+  namespace: e-commerce
+  labels:
+    app: product-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service-app
+  template:
+    metadata:
+      name: product-service-app
+      labels:
+        app: product-service-app
+    spec:
+      containers:
+        - name: product-service-app
+          image: coderabhisek/e-commerce-product-service:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/uploads
+              name: user-uploads-storage
+      volumes:
+        - name: user-uploads-storage
+          persistentVolumeClaim:
+            claimName: uploads-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+  namespace: e-commerce
+spec:
+  selector:
+    app: product-service-app
+  ports:
+    - port: 8082
+      targetPort: 8082
+      protocol: TCP

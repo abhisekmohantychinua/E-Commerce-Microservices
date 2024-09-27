@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-registry-app
+  namespace: e-commerce
+  labels:
+    app: service-registry-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-registry-app
+  template:
+    metadata:
+      name: service-registry-app
+      labels:
+        app: service-registry-app
+    spec:
+      containers:
+        - name: service-registry-app
+          image: coderabhisek/e-commerce-service-registry:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8761
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-registry
+  namespace: e-commerce
+spec:
+  selector:
+    app: service-registry-app
+  ports:
+    - port: 8761
+      targetPort: 8761
+      protocol: TCP
+
+  type: LoadBalancer
+
+
+      

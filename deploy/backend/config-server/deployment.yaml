@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server-app
+  namespace: e-commerce
+  labels:
+    app: config-server-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server-app
+  template:
+    metadata:
+      name: config-server-app
+      labels:
+        app: config-server-app
+    spec:
+      containers:
+        - name: config-server-app
+          image: coderabhisek/e-commerce-config-server:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8888
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server
+  namespace: e-commerce
+spec:
+  selector:
+    app: config-server-app
+  ports:
+    - port: 8888
+      targetPort: 8888
+      protocol: TCP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-server-config
+  namespace: e-commerce
+data:
+  CONFIG-SERVER-PORT: "8888"
