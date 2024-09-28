@@ -1,1 +1,2 @@
-![Entity](../resources/Entity.svg)
+![Entity](../resources/entity.png)
+![Document](../resources/documents.png)

@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0" version="24.7.16">
+  <diagram name="Page-1" id="FZnadlEPuWueatWL9To6">
+    <mxGraphModel dx="832" dy="515" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HaiCCjCJGKL7UiGXue9X-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="38" y="16" width="716" height="549" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-1" value="USER" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="51" y="30" width="100" height="504" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-2" value="API Gateway&lt;div&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;(resource server)&lt;/font&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="197" y="30" width="100" height="507" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-3" value="Authorization Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="354" y="30" width="100" height="506" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-4" value="User Service" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="489" y="30" width="100" height="501" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-5" value="&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 13px;&quot;&gt;request [Token]&lt;/font&gt;" style="html=1;verticalAlign=bottom;startArrow=none;startFill=0;endArrow=classic;startSize=8;curved=0;rounded=0;endFill=1;" parent="1" edge="1">
+          <mxGeometry width="60" relative="1" as="geometry">
+            <mxPoint x="98" y="116" as="sourcePoint" />
+            <mxPoint x="244" y="116" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-6" value="&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 13px;&quot;&gt;introspection [Token}&lt;/font&gt;" style="html=1;verticalAlign=bottom;startArrow=none;startFill=0;endArrow=classic;startSize=8;curved=0;rounded=0;endFill=1;" parent="1" edge="1">
+          <mxGeometry width="60" relative="1" as="geometry">
+            <mxPoint x="245" y="139" as="sourcePoint" />
+            <mxPoint x="402" y="139" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-7" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;request {username}&lt;/span&gt;&lt;/font&gt;" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="404" y="173" as="sourcePoint" />
+            <mxPoint x="539" y="173" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-8" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;USER&lt;/span&gt;&lt;/font&gt;" style="html=1;verticalAlign=bottom;endArrow=none;curved=0;rounded=0;startArrow=classic;startFill=1;endFill=0;" parent="1" edge="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="404" y="228" as="sourcePoint" />
+            <mxPoint x="539" y="228" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-9" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;claims&lt;/span&gt;&lt;/font&gt;" style="html=1;verticalAlign=bottom;endArrow=none;curved=0;rounded=0;startArrow=classic;startFill=1;endFill=0;entryX=0.52;entryY=0.524;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="246" y="322.00199999999995" as="sourcePoint" />
+            <mxPoint x="405.5" y="322.00199999999995" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-10" value="&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 13px;&quot;&gt;puts USER_ID inside claims&lt;/font&gt;" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="409" y="259" width="98" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-11" value="Other Services" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="624" y="30" width="100" height="505" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-12" value="&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 13px;&quot;&gt;puts USER_ID inside http header if required&lt;/font&gt;" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="252" y="358" width="132" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-13" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;request [USER_ID]&lt;/span&gt;&lt;/font&gt;" style="html=1;verticalAlign=bottom;endArrow=classic;curved=0;rounded=0;startArrow=none;startFill=0;endFill=1;" parent="1" target="Tcp5rEpv2B_jc5O9JE8I-11" edge="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="245" y="422.00199999999995" as="sourcePoint" />
+            <mxPoint x="404.5" y="422.00199999999995" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-14" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;response&lt;/span&gt;&lt;/font&gt;" style="html=1;verticalAlign=bottom;endArrow=none;curved=0;rounded=0;startArrow=classic;startFill=1;endFill=0;" parent="1" edge="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="247" y="457.00199999999995" as="sourcePoint" />
+            <mxPoint x="676" y="457" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tcp5rEpv2B_jc5O9JE8I-15" value="&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 13px;&quot;&gt;response&lt;/font&gt;" style="html=1;verticalAlign=bottom;startArrow=classic;startFill=1;endArrow=none;startSize=8;curved=0;rounded=0;endFill=0;" parent="1" edge="1">
+          <mxGeometry width="60" relative="1" as="geometry">
+            <mxPoint x="100" y="481" as="sourcePoint" />
+            <mxPoint x="246" y="481" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

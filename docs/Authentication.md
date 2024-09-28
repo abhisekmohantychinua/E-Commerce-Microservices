@@ -16,11 +16,11 @@ The whole authentication is divided into 2 parts:
 
 ### Authentication
 
-![authentication_flow](../resources/authorization_flow.svg)
+![authentication_flow](../resources/authorization_flow.png)
 
 ### Authorization
 
-![authorization_flow](../resources/token_validation.svg)
+![authorization_flow](../resources/token_validation.png)
 
 # Authorization Code + PKCE Security Flow and Rules
 
